@@ -33,7 +33,7 @@ namespace backend.test.Repositories {
 					LastUpdatedBy = 1,
 					ProjectId = null,
 					RequestedBy = 1,
-					UrgencyLevel = UrgencyLevel.Critical.ToString()
+					UrgencyLevel = TaskUrgencyLevel.Critical.ToString()
 				} );
 			}
 			catch ( Exception ex ) {
@@ -73,7 +73,20 @@ namespace backend.test.Repositories {
 		public async void Test_GetAllByUrgencyLevelWithLimitAsync() {
 			IEnumerable<Models.Domains.Task>? result = null;
 			try {
-				result = await _repository.GetAllByUrgencyLevelWithLimitAsync( UrgencyLevel.Critical, 0, 10 );
+				result = await _repository.GetAllByUrgencyLevelWithLimitAsync( TaskUrgencyLevel.Critical, 0, 10 );
+			}
+			catch ( Exception ex ) {
+				Assert.Fail( ex.Message );
+			}
+
+			Assert.NotNull( result );
+		}
+
+		[Fact]
+		public async void Test_GetAllByCompanyAndUrgencyLevelWithLimitAsync() {
+			IEnumerable<Models.Domains.Task>? result = null;
+			try {
+				result = await _repository.GetAllByCompanyAndUrgencyLevelWithLimitAsync( 1, TaskUrgencyLevel.Critical, 0, 10 );
 			}
 			catch ( Exception ex ) {
 				Assert.Fail( ex.Message );
@@ -110,7 +123,7 @@ namespace backend.test.Repositories {
 					LastUpdatedBy = 1,
 					ProjectId = null,
 					RequestedBy = 1,
-					UrgencyLevel = UrgencyLevel.Critical.ToString()
+					UrgencyLevel = TaskUrgencyLevel.Critical.ToString()
 				} );
 			}
 			catch ( Exception ex ) {
