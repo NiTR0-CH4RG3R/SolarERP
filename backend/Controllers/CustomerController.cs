@@ -16,6 +16,18 @@ namespace backend.Controllers {
 			_logger = logger;
 		}
 
+		[HttpGet("all")]
+		public async Task<IActionResult> Get( [FromQuery] Int32 userId ) {
+			try {
+				var customers = await _serviceCustomer.GetAllAsync( userId );
+				return Ok( customers );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex.Message );
+				return BadRequest( ex.Message );
+			}
+		}
+
 		[HttpGet]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId, [FromQuery] Int32 page, [FromQuery] Int32 pageSize ) {
 			try {

@@ -3,6 +3,7 @@ using backend.Models.DTO.SystemUser;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace backend.Services {
 	public class ServiceSystemUser : IServiceSystemUser {
@@ -94,7 +95,62 @@ namespace backend.Services {
 			throw new NotImplementedException();
 		}
 
-		public async Task<IEnumerable<GetSystemUserDTO>> GetAllAsync( int userId, int page, int pageSize ) {
+		public async Task<IEnumerable<GetSystemUserDTO>> GetAllAsync( Int32 userId ) {
+			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+			IEnumerable<SystemUser>? systemUsers = null;
+
+			try {
+				systemUsers = await _repositorySystemUser.GetAllByCompanyAsync( companyId );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+			}
+
+			if ( systemUsers == null ) {
+				throw new Exception( "No data found" );
+			}
+
+			List<GetSystemUserDTO> systemUsersDTO = new List<GetSystemUserDTO>();
+
+			foreach ( SystemUser systemUser in systemUsers ) {
+				Participant? participant = null;
+
+				try {
+					participant = await _repositoryParticipant.GetByIdAsync( ( int )systemUser.Id );
+				}
+				catch ( Exception ex ) {
+					_logger.LogError( ex, ex.Message );
+				}
+
+				if ( participant == null ) {
+					throw new Exception( "No data found" );
+				}
+
+				systemUsersDTO.Add( new GetSystemUserDTO {
+					Id = systemUser.Id,
+					FirstName = participant.FirstName,
+					LastName = participant.LastName,
+					Email = participant.Email,
+					Phone01 = participant.Phone01,
+					Phone02 = participant.Phone02,
+					Address = participant.Address,
+					Profession = participant.Profession,
+					CustomerRegistrationNumber = participant.CustomerRegistrationNumber,
+					Comments = participant.Comments,
+					Password = systemUser.Password,
+					Username = systemUser.Username,
+					Role = systemUser.Role,
+					ProfilePicture = systemUser.ProfilePicture,
+					LastUpdatedBy = systemUser.LastUpdatedBy,
+					LastUpdatedDateTime = systemUser.LastUpdatedDateTime,
+				} );
+			}
+
+			return systemUsersDTO;
+		}
+
+		public async Task<IEnumerable<GetSystemUserDTO>> GetAllWithLimitAsync( int userId, int page, int pageSize ) {
 			
 			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 

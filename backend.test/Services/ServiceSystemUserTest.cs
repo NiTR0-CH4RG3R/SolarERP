@@ -73,7 +73,21 @@ namespace backend.test.Services {
 			IEnumerable<GetSystemUserDTO>? result = null;
 
 			try {
-				result = await _serviceSystemUser.GetAllAsync( 2, 1, 10 );
+				result = await _serviceSystemUser.GetAllAsync( 2 );
+			}
+			catch ( Exception ex ) {
+				Assert.Fail( ex.Message );
+			}
+
+			Assert.NotNull( result );
+		}
+
+		[Fact]
+		public async void Test_GetAllByCompanyWithLimitAsync() {
+			IEnumerable<GetSystemUserDTO>? result = null;
+
+			try {
+				result = await _serviceSystemUser.GetAllWithLimitAsync( 2, 1, 10 );
 			}
 			catch ( Exception ex ) {
 				Assert.Fail( ex.Message );

@@ -17,10 +17,22 @@ namespace backend.Controllers {
 			_logger = logger;
 		}
 
+		[HttpGet("all")]
+		public async Task<IActionResult> Get( [FromQuery] Int32 userId ) {
+			try {
+				var result = await _serviceSystemUser.GetAllAsync( userId );
+				return Ok( result );
+			}
+			catch ( Exception e ) {
+				_logger.LogError( e.Message );
+				return BadRequest( e.Message );
+			}
+		}
+
 		[HttpGet]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId, [FromQuery] Int32 page, [FromQuery] Int32 pageSize ) {
 			try {
-				var result = await _serviceSystemUser.GetAllAsync( userId, page, pageSize );
+				var result = await _serviceSystemUser.GetAllWithLimitAsync( userId, page, pageSize );
 				return Ok( result );
 			}
 			catch ( Exception e ) {

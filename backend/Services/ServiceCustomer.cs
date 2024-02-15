@@ -3,6 +3,7 @@ using backend.Models.DTO.Customer;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace backend.Services {
 	public class ServiceCustomer : IServiceCustomer {
@@ -73,7 +74,42 @@ namespace backend.Services {
 		}
 
 		public async Task<IEnumerable<GetCustomerDTO>> GetAllAsync( int userId ) {
-			throw new NotImplementedException();
+
+			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
+			IEnumerable<Participant>? results = null;
+
+			try {
+				results = await _repositoryParticipant.GetAllByCompanyAsync( companyId );
+			}
+			catch ( Exception e ) {
+				_logger.LogError( e, "Error while trying to get customers by pages" );
+			}
+
+			if ( results == null ) {
+				throw new Exception( "No customers found" );
+			}
+
+			List<GetCustomerDTO> customers = new List<GetCustomerDTO>();
+
+			foreach ( var result in results ) {
+				customers.Add( new GetCustomerDTO {
+					Id = result.Id,
+					FirstName = result.FirstName,
+					LastName = result.LastName,
+					Category = result.Category,
+					Address = result.Address,
+					Email = result.Email,
+					Phone01 = result.Phone01,
+					Phone02 = result.Phone02,
+					CustomerRegistrationNumber = result.CustomerRegistrationNumber,
+					Profession = result.Profession,
+					Comments = result.Comments,
+					LastUpdatedBy = result.LastUpdatedBy,
+					LastUpdatedDateTime = result.LastUpdatedDateTime,
+				} );
+			}
+
+			return customers;
 		}
 
 		public async Task<IEnumerable<GetCustomerDTO>> GetAllByPagesAsync( int userId, int page, int pageSize ) {
