@@ -14,7 +14,7 @@ namespace backend.test.Repositories {
 		private readonly IDbConnection _connection;
 		private readonly IRepositoryTask _repository;
 		public RepositoryTaskTest() {
-			_connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=BlackDragon321@b;Port=3306" );
+			_connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=;Port=3306" );
 			_connection.Open();
 			_repository = new RepositoryTask( _connection );
 		}
