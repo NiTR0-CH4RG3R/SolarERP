@@ -52,7 +52,7 @@ namespace backend.test.Repositories
             IEnumerable<Models.Domains.TaskResource>? result = null;
             try
             {
-                result = await _repository.GetAllByTaskIdAndURLAsync(2, "taskresource2.jpg", 0, 10);
+                result = await _repository.GetByTaskIdAndURLAsync(2, "taskresource2.jpg");
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace backend.test.Repositories
             IEnumerable<Models.Domains.TaskResource>? result = null;
             try
             {
-                result = await _repository.GetAllByTaskIdAsync(2, 0, 10);
+                result = await _repository.GetAllByTaskIdAsync(2);
             }
             catch (Exception ex)
             {

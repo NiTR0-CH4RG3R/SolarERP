@@ -33,11 +33,11 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Models.Domains.TaskStatus>> GetAllByIdAsync(int id, int offset, int count)
+        public async Task<IEnumerable<Models.Domains.TaskStatus>> GetByIdAsync(int id)
         {
             String sp = "spSelectTaskStatusById";
 
-            var result = await _connection.QueryAsync<Models.Domains.TaskStatus>(sp, new { Id = id, offset, count }, commandType: CommandType.StoredProcedure);
+            var result = await _connection.QueryAsync<Models.Domains.TaskStatus>(sp, new { Id = id }, commandType: CommandType.StoredProcedure);
 
             if (result == null)
             {

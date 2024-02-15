@@ -32,11 +32,11 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<TaskResource>> GetAllByTaskIdAndURLAsync(int taskId, string url, int offset, int count)
+        public async Task<IEnumerable<TaskResource>> GetByTaskIdAndURLAsync(int taskId, string url)
         {
             String sp = "spSelectTaskResourceByTaskIdAndURL";
 
-			var result = await _connection.QueryAsync<Models.Domains.TaskResource>(sp, new { TaskId = taskId, URL = url, offset, count }, commandType: CommandType.StoredProcedure);
+			var result = await _connection.QueryAsync<Models.Domains.TaskResource>(sp, new { TaskId = taskId, URL = url }, commandType: CommandType.StoredProcedure);
 
 			if ( result == null ) {
 				throw new Exception( "No data found" );
@@ -45,11 +45,11 @@ namespace backend.Repositories
 			return result;
         }
 
-        public async Task<IEnumerable<TaskResource>> GetAllByTaskIdAsync(int taskId, int offset, int count)
+        public async Task<IEnumerable<TaskResource>> GetAllByTaskIdAsync(int taskId)
         {
             String sp = "spSelectTaskResourcesByTaskId";
 
-            var result = await _connection.QueryAsync<Models.Domains.TaskResource>(sp, new { TaskId = taskId, offset, count }, commandType: CommandType.StoredProcedure);
+            var result = await _connection.QueryAsync<Models.Domains.TaskResource>(sp, new { TaskId = taskId }, commandType: CommandType.StoredProcedure);
 
             if (result == null)
             {

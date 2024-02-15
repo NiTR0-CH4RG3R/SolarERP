@@ -51,7 +51,7 @@ namespace backend.test.Repositories
             IEnumerable<Models.Domains.TaskStatus>? result = null;
             try
             {
-                result = await _repository.GetAllByIdAsync(2, 0, 10);
+                result = await _repository.GetByIdAsync(2);
             }
             catch (Exception ex)
             {
