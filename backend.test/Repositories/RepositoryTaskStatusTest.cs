@@ -31,7 +31,7 @@ namespace backend.test.Repositories
                 result = await _repository.CreateAsync(new Models.Domains.TaskStatus
                 {
                     TaskId = 2,
-                    Status = StatusCategories.Active.ToString(),
+                    Status = TaskStatusCategory.Active.ToString(),
                     Comments = "This is active status test comment",
                     LastUpdatedBy = 1
 
@@ -87,7 +87,7 @@ namespace backend.test.Repositories
                 {
                     Id = 1,
                     TaskId = 2,
-                    Status = StatusCategories.Invalid.ToString(),
+                    Status = TaskStatusCategory.Invalid.ToString(),
                     Comments = "This is invalid status updated comment",
                     LastUpdatedBy = 1
                 });

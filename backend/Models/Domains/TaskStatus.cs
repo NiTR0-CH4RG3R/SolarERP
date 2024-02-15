@@ -1,6 +1,6 @@
 ﻿namespace backend.Models.Domains
 {
-    public enum StatusCategories
+    public enum TaskStatusCategory
     {
         Active,
         Onhold, 
