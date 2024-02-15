@@ -32,7 +32,7 @@ namespace backend.test.Repositories
                 {
                     TaskId = 2,
                     URL = "taskresource2.jpg",
-                    Category = ResourceCategories.Document.ToString(),
+                    Category = TaskResourceCategory.Document.ToString(),
                     Comments = "Task Resource test comment",
                     LastUpdatedBy = 1
 

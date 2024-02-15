@@ -1,6 +1,6 @@
 ﻿namespace backend.Models.Domains
 {
-    public enum ResourceCategories
+    public enum TaskResourceCategory
     {
         Image,
         Document,
