@@ -6,12 +6,11 @@ namespace backend.Models.Domains {
 		Inquiry,
 		Activity,
 	}
-	public enum UrgencyLevel {
+	public enum TaskUrgencyLevel {
 		Critical, High, Neutral, Low, Unknown
 	}
 
 	public class Task {
-
 		public Int32? Id { get; set; }
 		public required Int32 CompanyId { get; set; }
 		public required String Category { get; set; }
