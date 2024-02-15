@@ -17,7 +17,7 @@ namespace backend.test.Repositories
         private readonly IRepositoryTaskResource _repository;
         public RepositoryTaskResourceTest()
         {
-            _connection = new MySqlConnection("Server=localhost;Database=new_erp;Uid=root;Pwd=;Port=3306");
+            _connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=BlackDragon321@b;Port=3306" );
             _connection.Open();
             _repository = new RepositoryTaskResource(_connection);
         }
