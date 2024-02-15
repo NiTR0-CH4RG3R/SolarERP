@@ -40,6 +40,18 @@ namespace backend.Repositories {
 			return result;
 		}
 
+		public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyAndUrgencyLevelWithLimitAsync( int companyId, TaskUrgencyLevel urgencyLevel, int offset, int count ) {
+			String sp = "spSelectTasksByCompanyAndUrgencyLevelWithLimit";
+
+			var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { CompanyId = companyId, UrgencyLevel = urgencyLevel.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
+
+			if ( result == null ) {
+				throw new Exception( "No data found" );
+			}
+
+			return result;
+		}
+
 		public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyWithLimitAsync( int companyId, int offset, int count ) {
 			String sp = "spSelectTasksByCompanyIdWithLimit";
 
@@ -52,7 +64,7 @@ namespace backend.Repositories {
 			return result;
 		}
 
-		public async Task<IEnumerable<Models.Domains.Task>> GetAllByUrgencyLevelWithLimitAsync( UrgencyLevel urgencyLevel, int offset, int count ) {
+		public async Task<IEnumerable<Models.Domains.Task>> GetAllByUrgencyLevelWithLimitAsync( TaskUrgencyLevel urgencyLevel, int offset, int count ) {
 			String sp = "spSelectTasksByUrgencyLevelWithLimit";
 
 			var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { UrgencyLevel = urgencyLevel.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
