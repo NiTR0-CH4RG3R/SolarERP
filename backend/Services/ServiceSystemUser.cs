@@ -157,7 +157,7 @@ namespace backend.Services {
 			IEnumerable<SystemUser>? systemUsers = null;
 
 			try {
-				systemUsers = await _repositorySystemUser.GetAllByCompanyWithLimitAsync(companyId, page, pageSize);
+				systemUsers = await _repositorySystemUser.GetAllByCompanyWithLimitAsync(companyId, ( page - 1 ) * pageSize, pageSize);
 			}
 			catch (Exception ex) {
 				_logger.LogError(ex, ex.Message);

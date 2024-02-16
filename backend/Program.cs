@@ -32,12 +32,23 @@ namespace backend {
 			builder.Services.AddScoped<IRepositoryCompany, RepositoryCompany>();
 			builder.Services.AddScoped<IRepositoryParticipant, RepositoryParticipant>();
 			builder.Services.AddScoped<IRepositorySystemUser, RepositorySystemUser>();
+			builder.Services.AddScoped<IRepositoryVendor, RepositoryVendor>();
+			builder.Services.AddScoped<IRepositoryVendorItem, RepositoryVendorItem>();
+			builder.Services.AddScoped<IRepositoryTask, RepositoryTask>();
+			builder.Services.AddScoped<IRepositoryTaskStatus, RepositoryTaskStatus>();
+			builder.Services.AddScoped<IRepositoryTaskResource, RepositoryTaskResource>();
+			builder.Services.AddScoped<IRepositoryProject, RepositoryProject>();
 
 			// Add our services
 			builder.Services.AddScoped<IServiceAuthentication, ServiceAuthentication>();
 			builder.Services.AddScoped<IServiceCustomer, ServiceCustomer>();
 			builder.Services.AddScoped<IServiceSystemUser, ServiceSystemUser>();
-
+			builder.Services.AddScoped<IServiceVendor, ServiceVendor>();
+			builder.Services.AddScoped<IServiceVendorItem, ServiceVendorItem>();
+			builder.Services.AddScoped<IServiceTask, ServiceTask>();
+			builder.Services.AddScoped<IServiceTaskStatus, ServiceTaskStatus>();
+			builder.Services.AddScoped<IServiceTaskResource, ServiceTaskResource>();
+			builder.Services.AddScoped<IServiceProject, ServiceProject>();
 
 			var app = builder.Build();
 

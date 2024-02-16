@@ -76,7 +76,7 @@ namespace backend.Services {
 			IEnumerable<Models.Domains.Task>? tasks = null;
 
 			try {
-				tasks = await _repositoryTask.GetAllByCompanyWithLimitAsync( comanyId, page, pageSize );
+				tasks = await _repositoryTask.GetAllByCompanyWithLimitAsync( comanyId, (page - 1) * pageSize, pageSize );
 			}
 			catch ( Exception ex ) {
 				_logger.LogError( ex, ex.Message );
@@ -113,7 +113,7 @@ namespace backend.Services {
 			IEnumerable<Models.Domains.Task>? tasks = null;
 
 			try {
-				tasks = await _repositoryTask.GetAllByAssignedToWithLimitAsync(userId, page, pageSize); 
+				tasks = await _repositoryTask.GetAllByAssignedToWithLimitAsync(userId, ( page - 1 ) * pageSize, pageSize); 
 			}
 			catch (Exception ex) {
 				_logger.LogError(ex, ex.Message);

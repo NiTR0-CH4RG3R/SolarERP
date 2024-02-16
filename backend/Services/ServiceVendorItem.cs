@@ -119,6 +119,59 @@ namespace backend.Services {
 			return vendorItemsDTO;
 		}
 
+		public async Task<IEnumerable<GetVendorItemDTO>> GetAllByVendorAsync( int userId, int vendorId, int page, int pageSize ) {
+			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
+			
+			Vendor? vendor = null;
+
+			try {
+				vendor = await _repositoryVendor.GetByIdAsync( vendorId );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+			}
+
+			// Check if the vendor exists and if it belongs to the same company
+
+			if ( vendor == null || vendor.CompanyId != companyId ) {
+				throw new Exception( "Vendor not found" );
+			}
+
+
+			IEnumerable<VendorItem>? vendorItems = null;
+
+			try {
+				vendorItems = await _repositoryVendorItem.GetAllByVendorWithLimitAsync( vendorId, ( page - 1 ) * pageSize, pageSize );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+			}
+
+			if ( vendorItems == null ) {
+				throw new Exception( "No vendor items found" );
+			}
+
+			List<GetVendorItemDTO> vendorItemsDTO = new List<GetVendorItemDTO>();
+
+			foreach ( VendorItem vendorItem in vendorItems ) {
+				vendorItemsDTO.Add( new GetVendorItemDTO {
+					Id = vendorItem.Id,
+					Brand = vendorItem.Brand,
+					Capacity = vendorItem.Capacity,
+					VendorId = vendorItem.VendorId,
+					Comments = vendorItem.Comments,
+					Price = vendorItem.Price,
+					WarrantyDuration = vendorItem.WarrantyDuration,
+					ProductCode = vendorItem.ProductCode,
+					ProductName = vendorItem.ProductName,
+					LastUpdatedBy = vendorItem.LastUpdatedBy,
+					LastUpdatedDateTime = vendorItem.LastUpdatedDateTime,
+				} );
+			}
+
+			return vendorItemsDTO;
+		}
+
 		public async Task<GetVendorItemDTO> GetByIdAsync( int id ) {
 			
 			VendorItem? vendorItem = null;

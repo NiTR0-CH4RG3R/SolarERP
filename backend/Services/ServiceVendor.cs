@@ -71,7 +71,7 @@ namespace backend.Services {
 			IEnumerable<Vendor>? vendors = null;
 
 			try { 
-				vendors = await _repositoryVendor.GetAllByCompanyWithLimitAsync( companyId, page, pageSize );
+				vendors = await _repositoryVendor.GetAllByCompanyWithLimitAsync( companyId, ( page - 1 ) * pageSize, pageSize );
 			}
 			catch ( Exception ex ) {
 				_logger.LogError( ex, ex.Message );
