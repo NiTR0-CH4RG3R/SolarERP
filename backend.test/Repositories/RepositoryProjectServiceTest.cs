@@ -61,5 +61,30 @@ namespace backend.test.Repositories
             }
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public async void Test_UpdateAsync()
+        {
+            Models.Domains.ProjectService? result = null;
+
+            try
+            {
+                result = await _repository.UpdateAsync( new Models.Domains.ProjectService {
+                    Id = 2,
+                    ProjectId = 1,
+                    PlannedDate = DateTime.Now,
+                    Status = ProjectService.ProjectServiceStatus.Pending.ToString(),
+                    ConductedBy = 3,
+                    ConductedDate = DateTime.Now,
+                    Priority = ProjectService.ProjectServicePriority.Normal.ToString(),
+                    LastUpdatedDateTime = DateTime.Now,
+                });
+            }
+            catch(Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            Assert.NotNull(result);
+        }
     }
 }

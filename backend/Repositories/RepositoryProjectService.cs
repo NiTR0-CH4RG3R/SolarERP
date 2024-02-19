@@ -42,5 +42,19 @@ namespace backend.Repositories
             throw new NotImplementedException("No any Project Service Found");
 
         }
+
+        public async Task<ProjectService> UpdateAsync(ProjectService projectService)
+        {
+            string sp = "spUpdateProjectServiceById";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectService>(sp, projectService, commandType: CommandType.StoredProcedure);
+
+            if(result!=null && result.Count() > 0)
+            {
+                return result.First();
+            }
+
+            throw new NotImplementedException("No any Project Service Updataed");
+        }
     }
 }
