@@ -13,6 +13,20 @@ namespace backend.Repositories
         {
             _connection = connection;
         }
+
+        public async Task<ProjectTest> CreateAsync(ProjectTest projectTest)
+        {
+            string sp = "spInsertProjectTest";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectTest>(sp, projectTest, commandType: CommandType.StoredProcedure);
+
+            if(result != null && result.Count()>0) { 
+                return result.First();
+            }
+
+            throw new NotImplementedException("No any Project Test Created");
+        }
+
         public async Task<ProjectTest> GetByIdAsync(int id)
         {
             string sp = "spSelectProjectTestById";
