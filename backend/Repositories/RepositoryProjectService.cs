@@ -28,6 +28,11 @@ namespace backend.Repositories
             throw new NotImplementedException("No any Project Service created");
         }
 
+        public Task<bool> DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ProjectService> GetByIdAsync(int id)
         {
             string sp = "spSelectProjectServicebyId";
