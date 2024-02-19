@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\DTO\ProjectTest\" />
     <Folder Include="Models\Enums\" />
     <Folder Include="Database\" />
   </ItemGroup>
