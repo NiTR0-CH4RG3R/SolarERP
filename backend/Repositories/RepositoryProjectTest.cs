@@ -27,6 +27,11 @@ namespace backend.Repositories
             throw new NotImplementedException("No any Project Test Created");
         }
 
+        public Task<bool> DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ProjectTest> GetByIdAsync(int id)
         {
             string sp = "spSelectProjectTestById";
@@ -39,6 +44,19 @@ namespace backend.Repositories
             }
 
             throw new NotImplementedException("No any Project Test Found");
+        }
+
+        public async Task<ProjectTest> UpdateAsync(ProjectTest projectTest)
+        {
+            string sp = "spUpdateProjectTest";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectTest>(sp, projectTest, commandType:CommandType.StoredProcedure);
+
+            if (result!=null && result.Count()>0) {
+                return result.First();
+            }
+
+            throw new NotImplementedException("No any ProjectTest Updated");
         }
     }
 }

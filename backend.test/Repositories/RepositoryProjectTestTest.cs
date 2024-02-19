@@ -58,5 +58,28 @@ namespace backend.test.Repositories
             }
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public async void Test_UpdateAsync() 
+        {
+            Models.Domains.ProjectTest? result = null;
+
+            try
+            {
+                result = await _repository.UpdateAsync(new Models.Domains.ProjectTest {
+                    ProjectId = 1,
+                    Name = "Unit Test",
+                    Passed = 1,
+                    ConductedBy = 6,
+                    ConductedDate = DateTime.Now,
+                    LastUpdatedDateTime = DateTime.Now,
+                });
+            }
+            catch(Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            Assert.NotNull(result);
+        }
     }
 }
