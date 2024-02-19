@@ -26,7 +26,7 @@ namespace backend.test.Repositories
         [Fact]
         public async void Test_CreateAsync()
         {
-            Models.Domains.ProjectService? result = null;
+            ProjectService? result = null;
             try
             {
                 result = await _repository.CreateAsync(new Models.Domains.ProjectService {
@@ -40,6 +40,22 @@ namespace backend.test.Repositories
                 });
             }
             catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async void Test_GetByIdAsync()
+        {
+            Models.Domains.ProjectService? result = null;
+
+            try
+            {
+                result = await _repository.GetByIdAsync(1);
+            }
+            catch(Exception ex)
             {
                 Assert.Fail(ex.Message);
             }

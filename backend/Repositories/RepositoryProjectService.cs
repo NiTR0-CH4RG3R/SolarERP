@@ -25,7 +25,22 @@ namespace backend.Repositories
                 return result.First();
             }
 
-            throw new NotImplementedException();
+            throw new NotImplementedException("No any Project Service created");
+        }
+
+        public async Task<ProjectService> GetByIdAsync(int id)
+        {
+            string sp = "spSelectProjectServicebyId";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectService>(sp, new { Id = id }, commandType: CommandType.StoredProcedure);
+
+            if (result!=null && result.Count()>0)
+            {
+                return result.First();
+            }
+
+            throw new NotImplementedException("No any Project Service Found");
+
         }
     }
 }
