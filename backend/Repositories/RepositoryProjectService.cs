@@ -33,6 +33,18 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<ProjectService>> GetAllByProjectIdWithLimitAsync(int projectId, int offset, int count)
+        {
+            string sp = "spSelectProjectServiceByProjectIdWithLimit";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectService>(sp, new { ProjectId = projectId, offset, count }, commandType: CommandType.StoredProcedure);
+            if(result == null)
+            {
+                throw new NotImplementedException("No data Found");
+            }
+            return result;
+        }
+
         public async Task<ProjectService> GetByIdAsync(int id)
         {
             string sp = "spSelectProjectServiceById";

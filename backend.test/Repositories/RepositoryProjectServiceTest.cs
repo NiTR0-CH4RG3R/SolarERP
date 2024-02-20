@@ -63,6 +63,21 @@ namespace backend.test.Repositories
         }
 
         [Fact]
+        public async void Test_GetAllByProjectIdWithLimitAsync()
+        {
+            IEnumerable<Models.Domains.ProjectService>? result = null;
+            try
+            {
+                result = await _repository.GetAllByProjectIdWithLimitAsync(2, 0, 10);
+            }
+            catch(Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            Assert.NotNull(result);
+        }
+
+        [Fact]
         public async void Test_UpdateAsync()
         {
             Models.Domains.ProjectService? result = null;
