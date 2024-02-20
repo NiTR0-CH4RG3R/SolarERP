@@ -88,10 +88,10 @@ namespace backend.test.Repositories
                     Id = 2,
                     ProjectId = 2,
                     PlannedDate = DateTime.Now,
-                    Status = ProjectService.ProjectServiceStatus.Done.ToString(),
+                    Status = ProjectService.ProjectServiceStatus.Pending.ToString(),
                     ConductedBy = 9,
                     ConductedDate = DateTime.Now,
-                    Priority = ProjectService.ProjectServicePriority.Urgent.ToString(),
+                    Priority = ProjectService.ProjectServicePriority.Low.ToString(),
                     LastUpdatedDateTime = DateTime.Now,
                 });
             }
