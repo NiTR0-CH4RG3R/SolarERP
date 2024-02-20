@@ -62,7 +62,7 @@ namespace backend.test.Repositories
 
             try
             {
-                result = await _repository.GetByIdAsync(1);
+                result = await _repository.GetByIdAsync(15);
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace backend.test.Repositories
 
             Assert.NotNull(result);
         }
-
+        
         
         [Fact]
         public async void Test_UpdateAsync()
@@ -98,14 +98,14 @@ namespace backend.test.Repositories
             {
                 result = await _repository.UpdateAsync(new ProjectItem
                 {
-                    Id = 1,
-                    ProjectId = 2,
-                    VendorItemId = 3,
-                    ModuleNo = "a3",
+                    Id = 15,
+                    ProjectId = 1,
+                    VendorItemId = 1,
+                    ModuleNo = "a2",
                     WarrantyDuration = "4 yrs",
-                    SerialNo = "a8",
-                    Comments = "fake Comments",
-                    LastUpdatedBy = 5
+                    SerialNo = "s10",
+                    Comments = "LOL Comments",
+                    LastUpdatedBy = 1
                 });
             }
             catch (Exception ex)
