@@ -14,7 +14,7 @@ namespace backend.Repositories
             _connection = connection;
         }
 
-        public async Task<ProjectService> CreateAsync(ProjectService projectService)
+        public async Task<ProjectService> CreateAsync(Models.Domains.ProjectService projectService)
         {
             string sp = "spInsertProjectService";
 
@@ -35,7 +35,7 @@ namespace backend.Repositories
 
         public async Task<ProjectService> GetByIdAsync(int id)
         {
-            string sp = "spSelectProjectServicebyId";
+            string sp = "spSelectProjectServiceById";
 
             var result = await _connection.QueryAsync<Models.Domains.ProjectService>(sp, new { Id = id }, commandType: CommandType.StoredProcedure);
 
@@ -48,7 +48,7 @@ namespace backend.Repositories
 
         }
 
-        public async Task<ProjectService> UpdateAsync(ProjectService projectService)
+        public async Task<ProjectService> UpdateAsync(Models.Domains.ProjectService projectService)
         {
             string sp = "spUpdateProjectServiceById";
 

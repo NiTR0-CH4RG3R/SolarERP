@@ -48,7 +48,7 @@ namespace backend.Repositories
 
         public async Task<ProjectTest> UpdateAsync(ProjectTest projectTest)
         {
-            string sp = "spUpdateProjectTest";
+            string sp = "spUpdateProjectTestById";
 
             var result = await _connection.QueryAsync<Models.Domains.ProjectTest>(sp, projectTest, commandType:CommandType.StoredProcedure);
 

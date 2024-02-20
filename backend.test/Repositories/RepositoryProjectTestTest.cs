@@ -67,10 +67,11 @@ namespace backend.test.Repositories
             try
             {
                 result = await _repository.UpdateAsync(new Models.Domains.ProjectTest {
+                    Id = 1,
                     ProjectId = 1,
                     Name = "Unit Test",
                     Passed = 1,
-                    ConductedBy = 6,
+                    ConductedBy = 3,
                     ConductedDate = DateTime.Now,
                     LastUpdatedDateTime = DateTime.Now,
                 });

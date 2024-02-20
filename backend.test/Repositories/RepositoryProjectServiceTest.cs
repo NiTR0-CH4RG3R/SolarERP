@@ -30,12 +30,12 @@ namespace backend.test.Repositories
             try
             {
                 result = await _repository.CreateAsync(new Models.Domains.ProjectService {
-                    ProjectId = 1,
+                    ProjectId = 2,
                     PlannedDate = DateTime.Now,
-                    Status = ProjectService.ProjectServiceStatus.Done.ToString(),
-                    ConductedBy = 2,
+                    Status = ProjectService.ProjectServiceStatus.Pending.ToString(),
+                    ConductedBy = 9,
                     ConductedDate = DateTime.Now,
-                    Priority = ProjectService.ProjectServicePriority.Normal.ToString(),
+                    Priority = ProjectService.ProjectServicePriority.Low.ToString(),
                     LastUpdatedDateTime = DateTime.Now,
                 });
             }
@@ -53,7 +53,7 @@ namespace backend.test.Repositories
 
             try
             {
-                result = await _repository.GetByIdAsync(1);
+                result = await _repository.GetByIdAsync(2);
             }
             catch(Exception ex)
             {
@@ -69,14 +69,14 @@ namespace backend.test.Repositories
 
             try
             {
-                result = await _repository.UpdateAsync( new Models.Domains.ProjectService {
+                result = await _repository.UpdateAsync(new Models.Domains.ProjectService { 
                     Id = 2,
-                    ProjectId = 1,
+                    ProjectId = 2,
                     PlannedDate = DateTime.Now,
-                    Status = ProjectService.ProjectServiceStatus.Pending.ToString(),
-                    ConductedBy = 3,
+                    Status = ProjectService.ProjectServiceStatus.Done.ToString(),
+                    ConductedBy = 9,
                     ConductedDate = DateTime.Now,
-                    Priority = ProjectService.ProjectServicePriority.Normal.ToString(),
+                    Priority = ProjectService.ProjectServicePriority.Urgent.ToString(),
                     LastUpdatedDateTime = DateTime.Now,
                 });
             }
