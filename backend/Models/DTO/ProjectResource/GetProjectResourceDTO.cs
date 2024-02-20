@@ -3,7 +3,7 @@
     public class GetProjectResourceDTO : AddProjectResourceDTO 
     { 
         public Int32? Id { get; set; }
-        public Int32? LastUpdateBy { get; set; }
+        public Int32? LastUpdatedBy { get; set; }
         public DateTime? LastUpdatedDateTime { get; set; }
     }
 }

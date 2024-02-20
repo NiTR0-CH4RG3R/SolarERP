@@ -14,6 +14,21 @@ namespace backend.Repositories
             _connection = connection;
         }
 
+
+        public async Task<IEnumerable<ProjectItem>> GetAllByProjectWithLimitAsync(int projectId, int offset, int count)
+        {
+            String sp = "spSelectProjectItemsByProjectIdWithLimit";
+
+            var result = await _connection.QueryAsync<ProjectItem>(sp, new { ProjectId = projectId, offset, count }, commandType: CommandType.StoredProcedure);
+
+            if (result == null)
+            {
+                throw new Exception("No data found");
+            }
+
+            return result;
+        }
+
         public async Task<ProjectItem> CreateAsync(ProjectItem projectItem)
         {
             String sp = "spInsertProjectItem";

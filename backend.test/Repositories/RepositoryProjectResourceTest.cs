@@ -32,7 +32,7 @@ namespace backend.test.Repositories
             {
                 result = await _repository.CreateAsync(new ProjectResource
                 {
-                    LastUpdateBy=1,
+                    LastUpdatedBy=1,
                     Comments = "Test Comments",
                     ProjectId = 1,
                     URL="addd",
@@ -70,6 +70,23 @@ namespace backend.test.Repositories
             Assert.NotNull(result);
         }
 
+
+        [Fact]
+        public async void Test_GetAllByProjectWithLimitAsync()
+        {
+            IEnumerable<ProjectResource>? result = null;
+            try
+            {
+                result = await _repository.GetAllByProjectWithLimitAsync(1, 0, 10);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+
         [Fact]
         public async void Test_UpdateAsync()
         {
@@ -80,7 +97,7 @@ namespace backend.test.Repositories
                 result = await _repository.UpdateAsync(new ProjectResource
                 {
                     Id = 1,
-                    LastUpdateBy = 1,
+                    LastUpdatedBy = 1,
                     Comments = "LOL Comments",
                     ProjectId = 1,
                     URL = "fgrr",

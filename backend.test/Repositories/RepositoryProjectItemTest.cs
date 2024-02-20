@@ -36,7 +36,7 @@ namespace backend.test.Repositories
                     VendorItemId = 1,
                     ModuleNo = "a1",
                     WarrantyDuration="5 yrs",
-                    SerialNo="s1",
+                    SerialNo="s10",
                     Comments="Test Comments",
                     LastUpdatedBy=1
 
@@ -73,23 +73,12 @@ namespace backend.test.Repositories
         }
 
         [Fact]
-        public async void Test_UpdateAsync()
+        public async void Test_GetAllByProjectWithLimitAsync()
         {
-            ProjectItem? result = null;
-
+            IEnumerable<ProjectItem>? result = null;
             try
             {
-                result = await _repository.UpdateAsync(new ProjectItem
-                {
-                    Id = 1,
-                    ProjectId = 1,
-                    VendorItemId = 1,
-                    ModuleNo = "1",
-                    WarrantyDuration = "4 yrs",
-                    SerialNo = "s7",
-                    Comments = "LOL Comments",
-                    LastUpdatedBy = 1
-                });
+                result = await _repository.GetAllByProjectWithLimitAsync(1, 0, 10);
             }
             catch (Exception ex)
             {
@@ -99,6 +88,34 @@ namespace backend.test.Repositories
             Assert.NotNull(result);
         }
 
+        
+        [Fact]
+        public async void Test_UpdateAsync()
+        {
+            ProjectItem? result = null;
+
+            try
+            {
+                result = await _repository.UpdateAsync(new ProjectItem
+                {
+                    Id = 1,
+                    ProjectId = 2,
+                    VendorItemId = 3,
+                    ModuleNo = "a3",
+                    WarrantyDuration = "4 yrs",
+                    SerialNo = "a8",
+                    Comments = "fake Comments",
+                    LastUpdatedBy = 5
+                });
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+        
 
 
     }

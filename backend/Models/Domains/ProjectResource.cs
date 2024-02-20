@@ -15,7 +15,7 @@ namespace backend.Models.Domains
         public required String Category { get; set; }
         public required String URL { get; set; }
         public String? Comments { get; set; }
-        public Int32? LastUpdateBy { get; set; }
+        public Int32? LastUpdatedBy { get; set; }
         public DateTime? LastUpdatedDateTime { get; set; }
 
     }

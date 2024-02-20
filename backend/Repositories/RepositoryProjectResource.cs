@@ -28,10 +28,21 @@ namespace backend.Repositories
             throw new Exception("No project resource was created");
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<IEnumerable<ProjectResource>> GetAllByProjectWithLimitAsync(int projectId, int offset, int count)
         {
-            throw new NotImplementedException();
+            String sp = "spSelectProjectResourceByProjectIdWithLimit";
+
+            var result = await _connection.QueryAsync<ProjectResource>(sp, new { ProjectId = projectId, offset, count }, commandType: CommandType.StoredProcedure);
+
+            if (result == null)
+            {
+                throw new Exception("No data found");
+            }
+
+            return result;
         }
+
+
 
         public async Task<ProjectResource> GetByIdAsync(int id)
         {
