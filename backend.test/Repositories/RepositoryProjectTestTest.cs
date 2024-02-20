@@ -21,22 +21,6 @@ namespace backend.test.Repositories
         }
 
         [Fact]
-        public async void Test_GetById()
-        {
-            Models.Domains.ProjectTest? result = null;
-
-            try
-            {
-                result = await _repository.GetByIdAsync(1);
-            }
-            catch(Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-            Assert.NotNull(result);
-        }
-
-        [Fact]
         public async void Test_CreateAsync()
         {
             Models.Domains.ProjectTest? result = null;
@@ -60,6 +44,37 @@ namespace backend.test.Repositories
         }
 
         [Fact]
+        public async void Test_GetById()
+        {
+            Models.Domains.ProjectTest? result = null;
+
+            try
+            {
+                result = await _repository.GetByIdAsync(2);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async void Test_GetAllByProjectIdWithLimitAsync()
+        {
+            IEnumerable<Models.Domains.ProjectTest>? result = null;
+            try
+            {
+                result = await _repository.GetAllByProjectIdWithLimitAsync(1, 10, 0);
+            }
+            catch(Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            Assert.NotNull(result);
+        }
+
+        [Fact]
         public async void Test_UpdateAsync() 
         {
             Models.Domains.ProjectTest? result = null;
@@ -67,7 +82,7 @@ namespace backend.test.Repositories
             try
             {
                 result = await _repository.UpdateAsync(new Models.Domains.ProjectTest {
-                    Id = 1,
+                    Id = 2,
                     ProjectId = 1,
                     Name = "Unit Test",
                     Passed = 1,

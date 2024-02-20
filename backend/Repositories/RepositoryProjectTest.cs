@@ -32,6 +32,19 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<ProjectTest>> GetAllByProjectIdWithLimitAsync(int projectId, int offset, int count)
+        {
+            string sp = "spSelectProjectTestByProjectIdWithLimit";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectTest>(sp, new { ProjectId = projectId, offset, count }, commandType: CommandType.StoredProcedure);
+
+            if(result == null)
+            {
+                throw new NotImplementedException("No data Found");
+            }
+            return result;
+        }
+
         public async Task<ProjectTest> GetByIdAsync(int id)
         {
             string sp = "spSelectProjectTestById";
