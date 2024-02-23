@@ -38,7 +38,7 @@ namespace backend.Services
                 _logger.LogError(ex, ex.Message);
             }
 
-            // Check if the vendor exists and if it belongs to the same company
+            // Check if the project exists and if it belongs to the same company
             if (project == null || project.CompanyId != companyId)
             {
                 throw new Exception("Project not found");
