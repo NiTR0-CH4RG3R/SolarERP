@@ -33,20 +33,20 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Models.Domains.TaskStatus>> GetByIdAsync(int id)
+        public async Task<Models.Domains.TaskStatus> GetByIdAsync(int id)
         {
             String sp = "spSelectTaskStatusById";
 
             var result = await _connection.QueryAsync<Models.Domains.TaskStatus>(sp, new { Id = id }, commandType: CommandType.StoredProcedure);
 
-            if (result == null)
+            if (result == null || result.Count() == 0)
             {
                 throw new Exception("No data found");
             }
 
-            return result;
+            return result.First();
         }
-
+         
         public async Task<IEnumerable<Models.Domains.TaskStatus>> GetAllByTaskIdWithLimitAsync(int taskId, int offset, int count)
         {
             String sp = "spSelectTaskStatusByTaskIdWithLimit";
