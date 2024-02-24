@@ -2,6 +2,7 @@
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg;
 
 namespace backend.Controllers {
 	[Route( "api/[controller]" )]
@@ -16,9 +17,9 @@ namespace backend.Controllers {
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Get( [FromQuery] Int32 userId, [FromQuery] Int32 taskId ) {
+		public async Task<IActionResult> Get( [FromQuery] Int32 userId, [FromQuery] Int32 taskId, [FromQuery] Int32 page, [FromQuery] Int32 pageSize) {
 			try {
-				var result = await _serviceTaskStatus.GetAllByTaskAsync( userId, taskId );
+				var result = await _serviceTaskStatus.GetAllByTaskAsync( userId, taskId, page, pageSize );
 				return Ok( result );
 			}
 			catch ( Exception ex ) {
