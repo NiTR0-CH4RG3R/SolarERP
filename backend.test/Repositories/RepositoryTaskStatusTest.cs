@@ -17,7 +17,7 @@ namespace backend.test.Repositories
         private readonly IRepositoryTaskStatus _repository;
         public RepositoryTaskStatusTest()
         {
-            _connection = new MySqlConnection("Server=localhost;Database=new_erp;Uid=root;Pwd=BlackDragon321@b;Port=3306");
+            _connection = new MySqlConnection("Server=localhost;Database=new_erp;Uid=root;Pwd=;Port=3306");
             _connection.Open();
             _repository = new RepositoryTaskStatus(_connection);
         }
@@ -30,7 +30,7 @@ namespace backend.test.Repositories
             {
                 result = await _repository.CreateAsync(new Models.Domains.TaskStatus
                 {
-                    TaskId = 2,
+                    TaskId = 3,
                     Status = TaskStatusCategory.Active.ToString(),
                     Comments = "This is active status test comment",
                     LastUpdatedBy = 1
@@ -46,9 +46,9 @@ namespace backend.test.Repositories
         }
 
         [Fact]
-        public async void Test_GetAllByIdAsync()
+        public async void Test_GetByIdAsync()
         {
-            IEnumerable<Models.Domains.TaskStatus>? result = null;
+            Models.Domains.TaskStatus? result = null;
             try
             {
                 result = await _repository.GetByIdAsync(2);
@@ -85,11 +85,11 @@ namespace backend.test.Repositories
             {
                 result = await _repository.UpdateAsync(new Models.Domains.TaskStatus
                 {
-                    Id = 1,
-                    TaskId = 2,
+                    Id =11,
+                    TaskId = 4,
                     Status = TaskStatusCategory.Invalid.ToString(),
                     Comments = "This is invalid status updated comment",
-                    LastUpdatedBy = 1
+                    LastUpdatedBy = 3
                 });
             }
             catch (Exception ex)
