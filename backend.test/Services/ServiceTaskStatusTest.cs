@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using backend.Models.DTO.TaskStatus;
 using backend.Models.DTO.VendorItem;
+using backend.Models.DTO.Project;
 
 namespace backend.test.Services
 {
@@ -78,10 +79,10 @@ namespace backend.test.Services
 
             try
             {
-                result = await _serviceTaskStatus.UpdateAsync(2, 1, new AddTaskStatusDTO
+                result = await _serviceTaskStatus.UpdateAsync(3, 2, new AddTaskStatusDTO
                 {
 
-                    TaskId = 2,
+                    TaskId = 3,
                     Status = TaskStatusCategory.Active.ToString(),
                     Comments = "Comment updated ",
                     
@@ -95,5 +96,23 @@ namespace backend.test.Services
             Assert.NotNull(result);
         }
 
+        [Fact]
+        public async void Test_GetByIdAsync()
+        {
+            // Act
+            GetTaskStatusDTO? result = null;
+            try
+            {
+                result = await _serviceTaskStatus.GetByIdAsync(2);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        
     }
 }
