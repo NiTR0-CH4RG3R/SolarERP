@@ -2,6 +2,7 @@
 {
     public class AddProjectServiceDTO
     {
+        public required Int32 ProjectId { get; set; }
         public required DateTime PlannedDate { get; set; }
         public required string Status { get; set; }
         public Int32? ConductedBy { get; set; }
