@@ -118,7 +118,7 @@ namespace backend.Services
 
             if (projectTests == null)
             {
-                throw new Exception("No project resource found");
+                throw new Exception("No project Test found");
             }
 
             List<GetProjectTestDTO> projectTestDTO = new List<GetProjectTestDTO>();
