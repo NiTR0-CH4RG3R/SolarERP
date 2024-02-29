@@ -53,7 +53,8 @@ namespace backend.Repositories {
 		}
 
 		public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyWithLimitAsync( int companyId, int offset, int count ) {
-			String sp = "spSelectTasksByCompanyIdWithLimit";
+            
+            String sp = "spSelectTasksByCompanyIdWithStatus";
 
 			var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { CompanyId = companyId, offset, count }, commandType: CommandType.StoredProcedure);
 
@@ -62,9 +63,9 @@ namespace backend.Repositories {
 			}
 
 			return result;
-		}
+        }
 
-		public async Task<IEnumerable<Models.Domains.Task>> GetAllByUrgencyLevelWithLimitAsync( TaskUrgencyLevel urgencyLevel, int offset, int count ) {
+        public async Task<IEnumerable<Models.Domains.Task>> GetAllByUrgencyLevelWithLimitAsync( TaskUrgencyLevel urgencyLevel, int offset, int count ) {
 			String sp = "spSelectTasksByUrgencyLevelWithLimit";
 
 			var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { UrgencyLevel = urgencyLevel.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
@@ -77,9 +78,9 @@ namespace backend.Repositories {
 		}
 
 		public async Task<Models.Domains.Task> GetByIdAsync( int id ) {
-			String sp = "spSelectTaskById";
-
-			var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { Id = id }, commandType: CommandType.StoredProcedure);
+			String sp = "spSelectTaskByIdWithStatus";
+            //spSelectTaskById
+            var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { Id = id }, commandType: CommandType.StoredProcedure);
 			
 			if ( result != null && result.Count() > 0 ) {
 				return result.First();

@@ -3,5 +3,6 @@
 		public Int32? Id { get; set; }
 		public Int32? LastUpdatedBy { get; set; }
 		public DateTime? LastUpdatedDateTime { get; set; }
-	}
+        public String? Status { get; set; }
+    }
 }
