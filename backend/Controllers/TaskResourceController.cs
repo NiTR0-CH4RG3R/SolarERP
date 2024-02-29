@@ -31,7 +31,7 @@ namespace backend.Controllers {
 		[HttpGet( "{taskId:int}" )]
 		public async Task<IActionResult> GetByTaskIdAndURL( [FromQuery] Int32 userId, [FromRoute] Int32 taskId, [FromQuery] String URL ) {
 			try {
-				var taskResource = await _serviceTaskResource.GetByTaskIdAndURLAsync( taskId, URL );
+				var taskResource = await _serviceTaskResource.GetByTaskIdAndURLAsync( userId, taskId, URL );
 				return Ok( taskResource );
 			}
 			catch ( Exception ex ) {
