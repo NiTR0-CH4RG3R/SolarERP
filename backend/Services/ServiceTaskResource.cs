@@ -1,11 +1,16 @@
 ﻿using backend.Models.Domains;
 using backend.Models.DTO.Task;
 using backend.Models.DTO.TaskReource;
+using backend.Models.DTO.TaskStatus;
 using backend.Models.DTO.VendorItem;
 using backend.Repositories;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.ComponentModel.Design;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace backend.Services
@@ -88,14 +93,117 @@ namespace backend.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<GetTaskResourceDTO>> GetAllByTaskIdAsync(int userId, int taskId)
+        public async Task<IEnumerable<GetTaskResourceDTO>> GetAllByTaskIdAsync(int userId, int taskId)
         {
-            throw new NotImplementedException();
+            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+            Models.Domains.Task? task = null;
+
+            try
+            {
+                task = await _repositoryTask.GetByIdAsync(taskId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if (task == null || task.CompanyId != companyId)
+            {
+                throw new Exception("No data found");
+            }
+
+            IEnumerable<Models.Domains.TaskResource>? taskResources = null;
+
+            try
+            {
+                taskResources = await _repositoryTaskResource.GetAllByTaskIdAsync(taskId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if (taskResources == null)
+            {
+                throw new Exception("No data found");
+            }
+
+            List<GetTaskResourceDTO> taskResourceDTOs = new List<GetTaskResourceDTO>();
+
+            foreach (Models.Domains.TaskResource taskResource in taskResources)
+            {
+                GetTaskResourceDTO taskResourceDTO = new GetTaskResourceDTO
+                {
+                    TaskId = taskResource.TaskId,
+                    URL = taskResource.URL,
+                    Category = taskResource.Category,
+                    Comments = taskResource.Comments,
+                    LastUpdatedBy = taskResource.LastUpdatedBy,
+                    LastUpdatedDateTime = taskResource.LastUpdatedDateTime
+                };
+
+                taskResourceDTOs.Add(taskResourceDTO);
+            }
+
+            return taskResourceDTOs;
         }
 
-        public Task<GetTaskResourceDTO> GetByTaskIdAndURLAsync(int taskId, string url)
+        public async Task<IEnumerable<GetTaskResourceDTO>> GetByTaskIdAndURLAsync(int userId, int taskId, string url)
         {
-            throw new NotImplementedException();
+            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+            Models.Domains.Task? task = null;
+
+            try
+            {
+                task = await _repositoryTask.GetByIdAsync(taskId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if (task == null || task.CompanyId != companyId)
+            {
+                throw new Exception("No data found");
+            }
+
+            IEnumerable<Models.Domains.TaskResource>? taskResources = null;
+
+
+            try
+            {
+                taskResources = await _repositoryTaskResource.GetByTaskIdAndURLAsync(taskId, url);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if (taskResources == null)
+            {
+                throw new Exception("No data found");
+            }
+
+            List<GetTaskResourceDTO> taskResourceDTOs = new List<GetTaskResourceDTO>();
+
+            foreach (Models.Domains.TaskResource taskResource in taskResources)
+            {
+                GetTaskResourceDTO taskResourceDTO = new GetTaskResourceDTO
+                {
+                    TaskId = taskResource.TaskId,
+                    URL = taskResource.URL,
+                    Category = taskResource.Category,
+                    Comments = taskResource.Comments,
+                    LastUpdatedBy = taskResource.LastUpdatedBy,
+                    LastUpdatedDateTime = taskResource.LastUpdatedDateTime
+                };
+
+                taskResourceDTOs.Add(taskResourceDTO);
+            }
+
+            return taskResourceDTOs;
         }
     }
 }

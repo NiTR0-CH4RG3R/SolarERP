@@ -71,12 +71,12 @@ namespace backend.Services {
 		}
 
 		public async Task<IEnumerable<GetTaskDTO>> GetAllAsync( int userId, int page, int pageSize ) {
-			Int32 comanyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
+			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
 			IEnumerable<Models.Domains.Task>? tasks = null;
 
 			try {
-				tasks = await _repositoryTask.GetAllByCompanyWithLimitAsync( comanyId, (page - 1) * pageSize, pageSize );
+				tasks = await _repositoryTask.GetAllByCompanyWithLimitAsync( companyId, (page - 1) * pageSize, pageSize );
 			}
 			catch ( Exception ex ) {
 				_logger.LogError( ex, ex.Message );
@@ -100,7 +100,8 @@ namespace backend.Services {
 					CallBackNumber = task.CallBackNumber,
 					ProjectId = task.ProjectId,
 					RequestedBy = task.RequestedBy,
-					UrgencyLevel = task.UrgencyLevel
+					UrgencyLevel = task.UrgencyLevel,
+					Status = task.Status,
 				} );
 			}
 
@@ -207,7 +208,8 @@ namespace backend.Services {
 				CallBackNumber = task.CallBackNumber,
 				ProjectId = task.ProjectId,
 				RequestedBy = task.RequestedBy,
-				UrgencyLevel = task.UrgencyLevel
+				UrgencyLevel = task.UrgencyLevel,
+				Status = task.Status
 			};
 		}
 
