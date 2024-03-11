@@ -1,4 +1,4 @@
-﻿using backend.Models.DTO.TaskReource;
+﻿using backend.Models.DTO.TaskResource;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

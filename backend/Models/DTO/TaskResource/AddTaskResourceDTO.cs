@@ -1,4 +1,4 @@
-﻿namespace backend.Models.DTO.TaskReource {
+﻿namespace backend.Models.DTO.TaskResource {
 	public class AddTaskResourceDTO {
 		public required Int32 TaskId { get; set; }
 		public required String URL { get; set; }
