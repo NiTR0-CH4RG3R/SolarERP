@@ -1,4 +1,4 @@
-﻿using backend.Models.DTO.TaskReource;
+﻿using backend.Models.DTO.TaskResource;
 
 namespace backend.Services.Interfaces {
 	public interface IServiceTaskResource {
