@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers {
 	[Route( "api/[controller]" )]
 	[ApiController]
-	public class ProjectResource( IServiceProjectResource _serviceProjectResource, ILogger<ProjectResource> _logger )  : ControllerBase {
+	public class ProjectResourceController( IServiceProjectResource _serviceProjectResource, ILogger<ProjectResourceController> _logger )  : ControllerBase {
 
 
 		[HttpGet( "all" )]
