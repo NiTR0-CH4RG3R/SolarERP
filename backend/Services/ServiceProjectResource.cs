@@ -7,35 +7,21 @@ using backend.Services.Utilities;
 
 namespace backend.Services
 {
-    public class ServiceProjectResource : IServiceProjectResource
+    public class ServiceProjectResource( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectResource repositoryProjectResource, ILogger<ServiceCustomer> logger ) : IServiceProjectResource
     {
-        IRepositoryParticipant _repositoryParticipant;
-        IRepositorySystemUser _repositorySystemUser;
-        IRepositoryProject _repositoryProject;
-        IRepositoryProjectResource _repositoryProjectResource;
-        ILogger<ServiceCustomer> _logger;
-
-        public ServiceProjectResource(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectResource repositoryProjectResource, ILogger<ServiceCustomer> logger)
+		public async Task<GetProjectResourceDTO> CreateAsync(int userId, AddProjectResourceDTO projectResource)
         {
-            _repositoryParticipant = repositoryParticipant;
-            _repositorySystemUser = repositorySystemUser;
-            _repositoryProject = repositoryProject;
-            _repositoryProjectResource = repositoryProjectResource;
-            _logger = logger;
-        }
-        public async Task<GetProjectResourceDTO> CreateAsync(int userId, AddProjectResourceDTO projectResource)
-        {
-            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+            Int32 companyId = await ServiceUtilities.GetCompanyId(logger, repositoryParticipant, repositorySystemUser, userId);
 
             Project? project = null;
 
             try
             {
-                project = await _repositoryProject.GetByIdAsync(projectResource.ProjectId);
+                project = await repositoryProject.GetByIdAsync(projectResource.ProjectId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             // Check if the project exists and if it belongs to the same company
@@ -63,11 +49,11 @@ namespace backend.Services
 
             try
             {
-                projectResourceCreated = await _repositoryProjectResource.CreateAsync( projectResourceToCreate );
+                projectResourceCreated = await repositoryProjectResource.CreateAsync( projectResourceToCreate );
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             if (projectResourceCreated == null)
@@ -96,17 +82,17 @@ namespace backend.Services
 
         public async Task<IEnumerable<GetProjectResourceDTO>> GetAllAsync(int userId, int page, int pageSize)
         {
-            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+            Int32 companyId = await ServiceUtilities.GetCompanyId(logger, repositoryParticipant, repositorySystemUser, userId);
 
             IEnumerable<ProjectResource>? projectResources = null;
 
             try
             {
-                projectResources = await _repositoryProjectResource.GetAllByProjectWithLimitAsync(companyId, page, pageSize);
+                projectResources = await repositoryProjectResource.GetAllByProjectWithLimitAsync(companyId, page, pageSize);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             if (projectResources == null)
@@ -137,17 +123,17 @@ namespace backend.Services
 
         public async Task<IEnumerable<GetProjectResourceDTO>> GetAllByProjectAsync(int userId, int projectId, int page, int pageSize)
         {
-            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+            Int32 companyId = await ServiceUtilities.GetCompanyId(logger, repositoryParticipant, repositorySystemUser, userId);
 
             Project? project = null;
 
             try
             {
-                project = await _repositoryProject.GetByIdAsync(projectId);
+                project = await repositoryProject.GetByIdAsync(projectId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             
@@ -162,11 +148,11 @@ namespace backend.Services
 
             try
             {
-                projectResources = await _repositoryProjectResource.GetAllByProjectWithLimitAsync(projectId, (page - 1) * pageSize, pageSize);
+                projectResources = await repositoryProjectResource.GetAllByProjectWithLimitAsync(projectId, (page - 1) * pageSize, pageSize);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             if (projectResources == null)
@@ -202,11 +188,11 @@ namespace backend.Services
 
             try
             {
-              projectResource = await _repositoryProjectResource.GetByIdAsync(id);
+              projectResource = await repositoryProjectResource.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             if (projectResource == null)
@@ -249,11 +235,11 @@ namespace backend.Services
 
             try
             {
-                projectResourceUpdated = await _repositoryProjectResource.UpdateAsync(projectResourceToUpdate);
+                projectResourceUpdated = await repositoryProjectResource.UpdateAsync(projectResourceToUpdate);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
             }
 
             if (projectResourceUpdated == null)
