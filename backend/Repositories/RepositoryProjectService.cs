@@ -25,7 +25,7 @@ namespace backend.Repositories
                 return result.First();
             }
 
-            throw new NotImplementedException("No any Project Service created");
+            throw new Exception("No any Project Service created");
         }
 
         public Task<bool> DeleteAsync(int id)
@@ -40,7 +40,7 @@ namespace backend.Repositories
             var result = await _connection.QueryAsync<Models.Domains.ProjectService>(sp, new { ProjectId = projectId, offset, count }, commandType: CommandType.StoredProcedure);
             if(result == null)
             {
-                throw new NotImplementedException("No data Found");
+                throw new Exception( "No data Found");
             }
             return result;
         }
@@ -56,7 +56,7 @@ namespace backend.Repositories
                 return result.First();
             }
 
-            throw new NotImplementedException("No any Project Service Found");
+            throw new Exception( "No any Project Service Found");
 
         }
 
@@ -71,7 +71,7 @@ namespace backend.Repositories
                 return result.First();
             }
 
-            throw new NotImplementedException("No any Project Service Updataed");
+            throw new Exception( "No any Project Service Updataed");
         }
     }
 }
