@@ -1,6 +1,6 @@
 ﻿using backend.Models.Domains;
 using backend.Models.DTO.Task;
-using backend.Models.DTO.TaskReource;
+using backend.Models.DTO.TaskResource;
 using backend.Models.DTO.TaskStatus;
 using backend.Models.DTO.VendorItem;
 using backend.Repositories;
