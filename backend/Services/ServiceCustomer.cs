@@ -1,42 +1,41 @@
-﻿using backend.Models.Domains;
+﻿using AutoMapper;
+using backend.Models.Domains;
 using backend.Models.DTO.Customer;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+
 
 namespace backend.Services {
-	public class ServiceCustomer : IServiceCustomer {
+	public class ServiceCustomer( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IMapper mapper, ILogger<ServiceCustomer> logger ) : IServiceCustomer {
 
-		IRepositoryParticipant _repositoryParticipant;
-		IRepositorySystemUser _repositorySystemUser;
-		ILogger<ServiceCustomer> _logger;
-
-		public ServiceCustomer( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, ILogger<ServiceCustomer> logger ) {
-			_repositoryParticipant = repositoryParticipant;
-			_repositorySystemUser = repositorySystemUser;
-			_logger = logger;
-		}
+		IRepositoryParticipant _repositoryParticipant = repositoryParticipant;
+		IRepositorySystemUser _repositorySystemUser = repositorySystemUser;
+		IMapper _mapper = mapper;
+		ILogger<ServiceCustomer> _logger = logger;
 
 		public async Task<GetCustomerDTO> CreateAsync( int userId, AddCustomerDTO customer ) {
 			// Check if the user is an employee
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
 			// Create the customer
-			Participant newCustomer = new Participant {
-				CompanyId = companyId,
-				FirstName = customer.FirstName,
-				LastName = customer.LastName,
-				Category = customer.Category,
-				Address = customer.Address,
-				Email = customer.Email,
-				Phone01 = customer.Phone01,
-				Phone02 = customer.Phone02,
-				CustomerRegistrationNumber = customer.CustomerRegistrationNumber,
-				Profession = customer.Profession,
-				Comments = customer.Comments,
-				LastUpdatedBy = userId,
-			};
+			//Participant newCustomer = new Participant {
+			//	CompanyId = companyId,
+			//	FirstName = customer.FirstName,
+			//	LastName = customer.LastName,
+			//	Category = customer.Category,
+			//	Address = customer.Address,
+			//	Email = customer.Email,
+			//	Phone01 = customer.Phone01,
+			//	Phone02 = customer.Phone02,
+			//	CustomerRegistrationNumber = customer.CustomerRegistrationNumber,
+			//	Profession = customer.Profession,
+			//	Comments = customer.Comments,
+			//	LastUpdatedBy = userId,
+			//};
+
+			Participant newCustomer = _mapper.Map<Participant>( customer );
+			newCustomer.CompanyId = companyId;
 
 			Participant? result = null;
 
@@ -51,21 +50,23 @@ namespace backend.Services {
 				throw new Exception( "Customer not created" );
 			}
 
-			return new GetCustomerDTO {
-				Id = result.Id,
-				FirstName = result.FirstName,
-				LastName = result.LastName,
-				Category = result.Category,
-				Address = result.Address,
-				Email = result.Email,
-				Phone01 = result.Phone01,
-				Phone02 = result.Phone02,
-				CustomerRegistrationNumber = result.CustomerRegistrationNumber,
-				Profession = result.Profession,
-				Comments = result.Comments,
-				LastUpdatedBy = result.LastUpdatedBy,
-				LastUpdatedDateTime = result.LastUpdatedDateTime,
-			};
+			//return new GetCustomerDTO {
+			//	Id = result.Id,
+			//	FirstName = result.FirstName,
+			//	LastName = result.LastName,
+			//	Category = result.Category,
+			//	Address = result.Address,
+			//	Email = result.Email,
+			//	Phone01 = result.Phone01,
+			//	Phone02 = result.Phone02,
+			//	CustomerRegistrationNumber = result.CustomerRegistrationNumber,
+			//	Profession = result.Profession,
+			//	Comments = result.Comments,
+			//	LastUpdatedBy = result.LastUpdatedBy,
+			//	LastUpdatedDateTime = result.LastUpdatedDateTime,
+			//};
+
+			return _mapper.Map<GetCustomerDTO>( result );
 
 		}
 
