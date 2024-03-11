@@ -1,4 +1,4 @@
-﻿using backend.Models.DTO.ProjectResource;
+﻿using backend.Models.DTO.ProjectService;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers {
 	[Route( "api/[controller]" )]
 	[ApiController]
-	public class ProjectResource( IServiceProjectResource _serviceProjectResource, ILogger<ProjectResource> _logger )  : ControllerBase {
+	public class ProjectServiceController : ControllerBase {
+		
+		private readonly IServiceProjectService _serviceProjectService;
+		private readonly ILogger<ProjectServiceController> _logger;
 
+		public ProjectServiceController( IServiceProjectService serviceProjectService, ILogger<ProjectServiceController> logger ) {
+			_serviceProjectService = serviceProjectService;
+			_logger = logger;
+		}
 
 		[HttpGet( "all" )]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId ) {
@@ -21,9 +28,9 @@ namespace backend.Controllers {
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Post( [FromQuery] Int32 userId, [FromBody] AddProjectResourceDTO projectResource ) {
+		public async Task<IActionResult> Post( [FromQuery] Int32 userId, [FromBody] AddProjectServiceDTO projectService ) {
 			try {
-				var result = await _serviceProjectResource.CreateAsync( userId, projectResource );
+				var result = await _serviceProjectService.CreateAsync( userId, projectService );
 				return Ok( result );
 			}
 			catch ( Exception ex ) {
@@ -35,7 +42,7 @@ namespace backend.Controllers {
 		[HttpGet]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId, [FromQuery] Int32 projectId, [FromQuery] Int32 page, [FromQuery] Int32 pageSize ) {
 			try {
-				var result = await _serviceProjectResource.GetAllByProjectAsync( userId, projectId, page, pageSize );
+				var result = await _serviceProjectService.GetAllByProjectIdAsync( userId, projectId, page, pageSize );
 				return Ok( result );
 			}
 			catch ( Exception ex ) {
@@ -47,7 +54,7 @@ namespace backend.Controllers {
 		[HttpGet( "{id:int}" )]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId, [FromRoute] Int32 id ) {
 			try {
-				var result = await _serviceProjectResource.GetByIdAsync( id );
+				var result = await _serviceProjectService.GetByIdAsync( id );
 				return Ok( result );
 			}
 			catch ( Exception ex ) {
@@ -57,22 +64,10 @@ namespace backend.Controllers {
 		}
 
 		[HttpPut( "{id:int}" )]
-		public async Task<IActionResult> Put( [FromQuery] Int32 userId, [FromRoute] Int32 id, [FromBody] AddProjectResourceDTO projectResource ) {
+		public async Task<IActionResult> Put( [FromQuery] Int32 userId, [FromRoute] Int32 id, [FromBody] AddProjectServiceDTO projectService ) {
 			try {
-				var result = await _serviceProjectResource.UpdateAsync( userId, id, projectResource );
+				var result = await _serviceProjectService.UpdateAsync( userId, id, projectService );
 				return Ok( result );
-			}
-			catch ( Exception ex ) {
-				_logger.LogError( ex, ex.Message );
-				return BadRequest( ex.Message );
-			}
-		}
-
-		[HttpDelete( "{id:int}" )]
-		public async Task<IActionResult> Delete( [FromQuery] Int32 userId, [FromRoute] Int32 id ) {
-			try {
-				await _serviceProjectResource.DeleteAsync( userId, id );
-				return Ok();
 			}
 			catch ( Exception ex ) {
 				_logger.LogError( ex, ex.Message );
