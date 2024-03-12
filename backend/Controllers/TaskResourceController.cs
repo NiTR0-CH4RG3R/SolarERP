@@ -1,5 +1,6 @@
 ﻿using backend.Models.DTO.TaskResource;
 using backend.Services.Interfaces;
+using backend.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,8 @@ namespace backend.Controllers {
 		[HttpPost]
 		public async Task<IActionResult> Post( [FromQuery] Int32 userId, [FromBody] AddTaskResourceDTO taskResource ) {
 			try {
+				// var path = await FileManager.SaveFileAsync( formFile, "task_resources" );
+				// taskResource.URL = path;
 				var result = await _serviceTaskResource.CreateAsync( userId, taskResource );
 				return Ok( result );
 			}
