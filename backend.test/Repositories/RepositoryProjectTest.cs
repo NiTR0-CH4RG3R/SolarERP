@@ -57,8 +57,25 @@ namespace backend.test.Repositories {
 
 			Assert.NotNull( result );
 		}
-
 		[Fact]
+
+		public async void TestGetAllByCompanyAsync()
+		{
+            IEnumerable<Project>? result = null;
+
+            try
+            {
+                result = await _repository.GetAllByCompanyAsync(1);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
 		public async void TestGetAllByCompanyWithLimitAsync() {
 			IEnumerable<Project>? result = null;
 
