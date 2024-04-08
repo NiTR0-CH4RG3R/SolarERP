@@ -27,7 +27,20 @@ namespace backend.Repositories {
 			throw new NotImplementedException();
 		}
 
-		public async Task<IEnumerable<Project>> GetAllByCompanyWithLimitAsync( int companyId, int offset, int count ) {
+        public async Task<IEnumerable<Project>> GetAllByCompanyAsync(Int32 companyId)
+        {
+			String sp = "spSelectProjectByCompanyId";
+
+			var result = await _connection.QueryAsync<Project>(sp, new { CompanyId = companyId }, commandType: CommandType.StoredProcedure);
+
+			if(result == null)
+			{
+				throw new Exception("No data found");
+			}
+			return result;
+        }
+
+        public async Task<IEnumerable<Project>> GetAllByCompanyWithLimitAsync( int companyId, int offset, int count ) {
 			String sp = "spSelectProjectsByCompanyIdWithLimit";
 
 			var result = await _connection.QueryAsync<Project>( sp, new { CompanyId = companyId, offset, count }, commandType: CommandType.StoredProcedure );
