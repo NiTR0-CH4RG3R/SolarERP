@@ -19,7 +19,8 @@ namespace backend.Controllers {
 		[HttpGet( "all" )]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId ) {
 			try {
-				throw new NotImplementedException();
+				var result = await _serviceProject.GetAllAsync(userId);
+				return Ok( result );
 			}
 			catch ( Exception ex ) {
 				_logger.LogError( ex, ex.Message );
