@@ -87,7 +87,62 @@ namespace backend.Services {
 			throw new NotImplementedException();
 		}
 
-		public async Task<IEnumerable<GetProjectDTO>> GetAllWithLimitAsync( int userId, int page, int pageSize ) {
+		public async Task<IEnumerable<GetProjectDTO>> GetAllAsync(Int32 userId)
+		{
+			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+			IEnumerable<Project>? projects = null;
+
+			try
+			{
+				projects = await _repositoryProject.GetAllByCompanyAsync(companyId);
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, ex.Message);
+			}
+
+			if (projects == null)
+			{
+				throw new Exception("No data found");
+			}
+
+			List<GetProjectDTO> projectDTOs = new List<GetProjectDTO>();
+
+			foreach (Project project in projects)
+			{
+				GetProjectDTO projectDTO = new GetProjectDTO
+				{
+					Id = project.Id,
+					Address = project.Address,
+					Comments = project.Comments,
+					Description = project.Description,
+					CommissionDate = project.CommissionDate,
+					CoordinatorId = project.CoordinatorId,
+					CustomerId = project.CustomerId,
+					ElectricityAccountNumber = project.ElectricityAccountNumber,
+					ElectricityBoardArea = project.ElectricityBoardArea,
+					ElectricityTariffStructure = project.ElectricityTariffStructure,
+					EstimatedCost = project.EstimatedCost,
+					LocationCoordinates = project.LocationCoordinates,
+					ProjectIdentificationNumber = project.ProjectIdentificationNumber,
+					ReferencedBy = project.ReferencedBy,
+					SalesPerson = project.SalesPerson,
+					StartDate = project.StartDate,
+					Status = project.Status,
+					SystemWarrantyPeriod = project.SystemWarrantyPeriod
+				};
+
+				projectDTOs.Add(projectDTO);
+
+
+			}
+			return projectDTOs;
+
+		}
+
+        public async Task<IEnumerable<GetProjectDTO>> GetAllWithLimitAsync( int userId, int page, int pageSize ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
 			IEnumerable<Project>? projects = null;
