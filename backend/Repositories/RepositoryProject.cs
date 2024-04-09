@@ -52,7 +52,20 @@ namespace backend.Repositories {
 			return result;
 		}
 
-		public async Task<Project> GetByIdAsync( int id ) {
+        public async Task<IEnumerable<Project>> GetAllByCustomerAsync(int companyId, int customerId)
+        {
+			String sp = "spSelectProjectByCustomerId";
+
+			var result = await _connection.QueryAsync<Project>(sp, new { CompanyId = companyId, CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+
+			if (result == null )
+			{
+				throw new Exception("No data found");
+			}
+			return result;
+        }
+
+        public async Task<Project> GetByIdAsync( int id ) {
 			String sp = "spSelectProjectById";
 
 			var result = await _connection.QueryAsync<Project>( sp, new { Id = id }, commandType: CommandType.StoredProcedure );
