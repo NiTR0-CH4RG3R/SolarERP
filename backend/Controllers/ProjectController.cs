@@ -52,6 +52,22 @@ namespace backend.Controllers {
 			}
 		}
 
+		[HttpGet("Customer/{customerId:int}")]
+
+		public async Task<IActionResult> GetProjectsByCustomerId([FromQuery] Int32 userId, [FromRoute] Int32 customerId)
+		{
+			try {
+				var result = await _serviceProject.GetAllByCustomerId(userId, customerId);
+				return Ok( result );
+			}
+			catch ( Exception ex )
+			{
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(ex.Message);
+            }
+		}
+
+
 		[HttpPost]
 		public async Task<IActionResult> Post( [FromQuery] Int32 userId, [FromBody] AddProjectDTO project ) {
 			try {
