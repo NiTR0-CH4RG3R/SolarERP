@@ -120,6 +120,52 @@ namespace backend.test.Services {
 		}
 
 		[Fact]
+
+		public async void GetAllByCompany()
+		{
+            // Arrange
+            Int32 userId = 1;
+
+            // Act
+            IEnumerable<GetProjectDTO>? result = null;
+            try
+            {
+                result = await _serviceProject.GetAllAsync(userId);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            // Assert
+            Assert.NotNull(result);
+
+        }
+
+        [Fact]
+
+        public async void GetAllByCustomer()
+        {
+            // Arrange
+            Int32 userId = 1;
+
+            // Act
+            IEnumerable<GetProjectDTO>? result = null;
+            try
+            {
+                result = await _serviceProject.GetAllByCustomerId(userId, 1);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            // Assert
+            Assert.NotNull(result);
+
+        }
+
+        [Fact]
 		public async void UpdateAsync() {
 			// Arrange
 			Int32 userId = 1;
