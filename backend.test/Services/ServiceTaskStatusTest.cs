@@ -1,5 +1,5 @@
 ﻿using backend.Models.Domains;
-using backend.Models.DTO.TaskReource;
+using backend.Models.DTO.TaskResource;
 using backend.Repositories.Interfaces;
 using backend.Repositories;
 using backend.Services.Interfaces;

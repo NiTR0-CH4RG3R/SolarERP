@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using backend.Models.Domains;
 using System.Security.Policy;
-using backend.Models.DTO.TaskReource;
+using backend.Models.DTO.TaskResource;
 
 namespace backend.test.Services
 {

@@ -37,7 +37,7 @@ namespace backend.test.Services {
 			_repositoryParticipant = new RepositoryParticipant(_connection);
 			_repositorySystemUser = new RepositorySystemUser(_connection);
 
-			_serviceCustomer = new ServiceCustomer(_repositoryParticipant, _repositorySystemUser, _logger);
+			//_serviceCustomer = new ServiceCustomer(_repositoryParticipant, _repositorySystemUser, _logger);
 		}
 
 		[Fact]
