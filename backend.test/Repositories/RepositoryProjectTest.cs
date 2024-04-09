@@ -15,7 +15,7 @@ namespace backend.test.Repositories {
 		private readonly IRepositoryProject _repository;
 
 		public RepositoryProjectTest() {
-			_connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=BlackDragon321@b;Port=3306" );
+			_connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=;Port=3306" );
 			_connection.Open();
 			_repository = new RepositoryProject( _connection );
 		}
@@ -26,21 +26,21 @@ namespace backend.test.Repositories {
 				CompanyId = 1,
 				CommissionDate = null,
 				LastUpdatedDateTime = null,
-				LastUpdatedBy = 1,
-				Address = "Test Address",
+				LastUpdatedBy = 2,
+				Address = "Test Address 3",
 				SalesPerson = 1,
-				Comments = "Test Comments",
-				SystemWarrantyPeriod = "Test Warranty",
-				LocationCoordinates = "Test Coordinates",
-				ProjectIdentificationNumber = "Test Number",
-				ElectricityAccountNumber = "Test Account",
-				ElectricityBoardArea = "Test Area",
-				ElectricityTariffStructure = "Test Structure",
-				EstimatedCost = 1000,
+				Comments = "Test Comments 3",
+				SystemWarrantyPeriod = "Test Warranty 3",
+				LocationCoordinates = "Test Coordinates 3",
+				ProjectIdentificationNumber = "Test Number 3",
+				ElectricityAccountNumber = "Test Account 3",
+				ElectricityBoardArea = "Test Area 3",
+				ElectricityTariffStructure = "Test Structure 3",
+				EstimatedCost = 10000,
 				ReferencedBy = 1,
-				CustomerId = 1,
+				CustomerId = 2,
 				CoordinatorId = 1,
-				Description = "Test Description",
+				Description = "Test Description 3",
 				StartDate = DateTime.Now,
 				Id = null,
 				Status = "Active"
@@ -74,6 +74,23 @@ namespace backend.test.Repositories {
 
             Assert.NotNull(result);
         }
+
+		[Fact]
+
+		public async void TestGetAllByCustomerAsync()
+		{
+			IEnumerable<Project>? result = null;
+
+			try
+			{
+				result = await _repository.GetAllByCustomerAsync(1, 1);
+			}
+			catch( Exception ex )
+			{
+				Assert.Fail(ex.Message);
+			}
+			Assert.NotNull(result);
+		}
 
         [Fact]
 		public async void TestGetAllByCompanyWithLimitAsync() {
