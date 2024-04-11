@@ -245,7 +245,7 @@ namespace backend.Services {
 				Profession = participant.Profession,
 				CustomerRegistrationNumber = participant.CustomerRegistrationNumber,
 				Comments = participant.Comments,
-				Password = systemUser.Password,
+				Password = "",
 				Username = systemUser.Username,
 				Role = systemUser.Role,
 				ProfilePicture = systemUser.ProfilePicture,
