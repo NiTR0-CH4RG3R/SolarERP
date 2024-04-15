@@ -9,6 +9,7 @@ namespace backend.Controllers {
 	public class TestController( ILogger<TestController> logger ) : ControllerBase {
 		[HttpGet]
 		public IActionResult Get() {
+			 
 			return Ok( "Hello World" );
 		}
 

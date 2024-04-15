@@ -84,6 +84,11 @@ namespace backend {
 			builder.Services.AddScoped<IRepositoryTaskStatus, RepositoryTaskStatus>();
 			builder.Services.AddScoped<IRepositoryTaskResource, RepositoryTaskResource>();
 			builder.Services.AddScoped<IRepositoryProject, RepositoryProject>();
+			builder.Services.AddScoped<IRepositoryProjectItem, RepositoryProjectItem>();
+			builder.Services.AddScoped<IRepositoryProjectService, RepositoryProjectService>();
+			builder.Services.AddScoped<IRepositoryProjectTest, RepositoryProjectTest>();
+			builder.Services.AddScoped<IRepositoryProjectResource, RepositoryProjectResource>();
+			builder.Services.AddScoped<IRepositoryProjectCommisionReport, RepositoryProjectCommisionReport>();
 
 			// Add our services
 			builder.Services.AddScoped<IServiceAuthentication, ServiceAuthentication>();
@@ -95,6 +100,11 @@ namespace backend {
 			builder.Services.AddScoped<IServiceTaskStatus, ServiceTaskStatus>();
 			builder.Services.AddScoped<IServiceTaskResource, ServiceTaskResource>();
 			builder.Services.AddScoped<IServiceProject, ServiceProject>();
+			builder.Services.AddScoped<IServiceProjectItem, ServiceProjectItem>();
+			builder.Services.AddScoped<IServiceProjectService, ServiceProjectService>();
+			builder.Services.AddScoped<IServiceProjectTest, ServiceProjectTest>();
+			builder.Services.AddScoped<IServiceProjectResource, ServiceProjectResource>();
+			builder.Services.AddScoped<IServiceProjectCommisionReport, ServiceProjectCommisionReport>();
 
 			var app = builder.Build();
 
