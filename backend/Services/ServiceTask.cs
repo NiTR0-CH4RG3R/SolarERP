@@ -151,7 +151,7 @@ namespace backend.Services {
 			IEnumerable<Models.Domains.Task>? tasks = null;
 
 			try {
-				tasks = await _repositoryTask.GetAllByCompanyAndUrgencyLevelWithLimitAsync( companyId, urgencyLevel, page, pageSize );
+				tasks = await _repositoryTask.GetAllByCompanyAndUrgencyLevelWithLimitAsync( companyId, urgencyLevel, (page - 1) * pageSize, pageSize );
 			}
 			catch (Exception ex) {
 				_logger.LogError(ex, ex.Message);
@@ -213,7 +213,50 @@ namespace backend.Services {
 			};
 		}
 
-		public async Task<GetTaskDTO> UpdateAsync( int userId, int id, AddTaskDTO task ) {
+        public async Task<IEnumerable<GetTaskDTO>> GetAllByCategory(int userId, TaskCategories category , int page, int pageSize)
+        {
+            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+            IEnumerable<Models.Domains.Task>? tasks = null;
+
+            try
+            {
+                tasks = await _repositoryTask.GetAllByCompanyAndCategoryWithLimitAsync(companyId, category, (page - 1) * pageSize, pageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if (tasks == null)
+            {
+                throw new Exception("No tasks were found");
+            }
+
+            List<GetTaskDTO> tasksDTO = new List<GetTaskDTO>();
+
+            foreach (Models.Domains.Task task in tasks)
+            {
+                tasksDTO.Add(new GetTaskDTO
+                {
+                    Id = task.Id,
+                    Description = task.Description,
+                    Comments = task.Comments,
+                    LastUpdatedBy = task.LastUpdatedBy,
+                    LastUpdatedDateTime = task.LastUpdatedDateTime,
+                    AssignedTo = task.AssignedTo,
+                    Category = task.Category,
+                    CallBackNumber = task.CallBackNumber,
+                    ProjectId = task.ProjectId,
+                    RequestedBy = task.RequestedBy,
+                    UrgencyLevel = task.UrgencyLevel
+                });
+            }
+
+            return tasksDTO;
+        }
+
+        public async Task<GetTaskDTO> UpdateAsync( int userId, int id, AddTaskDTO task ) {
 			
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
@@ -259,5 +302,48 @@ namespace backend.Services {
 				UrgencyLevel = taskUpdated.UrgencyLevel
 			};
 		}
-	}
+
+        public async Task<IEnumerable<GetTaskDTO>> GetAllByCategoryAndUrgencyLevel(int userId, TaskCategories category, TaskUrgencyLevel urgencyLevel, int page, int pageSize)
+        {
+            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+            IEnumerable<Models.Domains.Task>? tasks = null;
+
+            try
+            {
+                tasks = await _repositoryTask.GetAllByCompanyWithCategoryAndUrgencyLevelLimitAsync(companyId, category, urgencyLevel, (page - 1) * pageSize, pageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if (tasks == null)
+            {
+                throw new Exception("No tasks were found");
+            }
+
+            List<GetTaskDTO> tasksDTO = new List<GetTaskDTO>();
+
+            foreach (Models.Domains.Task task in tasks)
+            {
+                tasksDTO.Add(new GetTaskDTO
+                {
+                    Id = task.Id,
+                    Description = task.Description,
+                    Comments = task.Comments,
+                    LastUpdatedBy = task.LastUpdatedBy,
+                    LastUpdatedDateTime = task.LastUpdatedDateTime,
+                    AssignedTo = task.AssignedTo,
+                    Category = task.Category,
+                    CallBackNumber = task.CallBackNumber,
+                    ProjectId = task.ProjectId,
+                    RequestedBy = task.RequestedBy,
+                    UrgencyLevel = task.UrgencyLevel
+                });
+            }
+
+            return tasksDTO;
+        }
+    }
 }
