@@ -1,6 +1,7 @@
 ﻿using backend.Models.Domains;
 using backend.Repositories.Interfaces;
 using Dapper;
+using MySqlX.XDevAPI.Common;
 using System.Data;
 
 namespace backend.Repositories {
@@ -40,7 +41,21 @@ namespace backend.Repositories {
 			return result;
 		}
 
-		public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyAndUrgencyLevelWithLimitAsync( int companyId, TaskUrgencyLevel urgencyLevel, int offset, int count ) {
+        public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyAndCategoryWithLimitAsync(int companyId, TaskCategories category, int offset, int count)
+        {
+            String sp = "spSelectTasksByCompanyAndCategoryWithLimit";
+
+            var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { CompanyId = companyId, Category = category.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
+
+            if (result == null)
+            {
+                throw new Exception("No data found");
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyAndUrgencyLevelWithLimitAsync( int companyId, TaskUrgencyLevel urgencyLevel, int offset, int count ) {
 			String sp = "spSelectTasksByCompanyAndUrgencyLevelWithLimit";
 
 			var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { CompanyId = companyId, UrgencyLevel = urgencyLevel.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
@@ -52,7 +67,22 @@ namespace backend.Repositories {
 			return result;
 		}
 
-		public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyWithLimitAsync( int companyId, int offset, int count ) {
+        public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyWithCategoryAndUrgencyLevelLimitAsync(int companyId, TaskCategories category, TaskUrgencyLevel urgencyLevel, int offset, int count)
+        {
+			String sp = "spSelectTasksByCompanyWithCategoryAndUrgencyLevelLimit";
+
+
+            var result = await _connection.QueryAsync<Models.Domains.Task>(sp, new { CompanyId = companyId, Category = category.ToString(), UrgencyLevel = urgencyLevel.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
+
+            if (result == null)
+            {
+                throw new Exception("No data found");
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Models.Domains.Task>> GetAllByCompanyWithLimitAsync( int companyId, int offset, int count ) {
             
             String sp = "spSelectTasksByCompanyIdWithStatus";
 
