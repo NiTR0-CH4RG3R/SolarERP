@@ -1,7 +1,9 @@
-﻿using backend.Models.DTO.Task;
+﻿using backend.Models.Domains;
+using backend.Models.DTO.Task;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1;
 
 namespace backend.Controllers {
 	[Route( "api/[controller]" )]
@@ -49,8 +51,54 @@ namespace backend.Controllers {
 				return BadRequest( ex.Message );
 			}
 		}
+		
+		[HttpGet("category")]
+		public async Task<IActionResult> GetTaskDetailsByCategory( [FromQuery] Int32 userId, [FromQuery] TaskCategories category, [FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+		{
+			try
+			{
+				var result = await _serviceTask.GetAllByCategory(userId, category, page, pageSize);
+				return Ok( result );
+			}
+			catch ( Exception ex )
+			{
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(ex.Message);
+            }
+		}
+		
+        [HttpGet("urgencylevel")]
+        public async Task<IActionResult> GetTaskDetailsByUrgencyLevel([FromQuery] Int32 userId, [FromQuery] TaskUrgencyLevel urgencyLevel, [FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+        {
+            try
+            {
+                var result = await _serviceTask.GetAllByUrgencyLevel(userId, urgencyLevel, page, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
 
-		[HttpPost]
+		[HttpGet("category+urgencylevel")]
+
+		public async Task<IActionResult> GetTaskDetailsByCategoryAndUrgencyLevel([FromQuery] Int32 userId, [FromQuery] TaskCategories category, [FromQuery] TaskUrgencyLevel urgencyLevel, [FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+		{
+            try
+            {
+                var result = await _serviceTask.GetAllByCategoryAndUrgencyLevel(userId, category, urgencyLevel, page, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
 		public async Task<IActionResult> Post( [FromQuery] Int32 userId, [FromBody] AddTaskDTO task ) {
 			try {
 				var result = await _serviceTask.CreateAsync( userId, task );
