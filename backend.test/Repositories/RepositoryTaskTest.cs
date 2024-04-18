@@ -95,7 +95,23 @@ namespace backend.test.Repositories {
 			Assert.NotNull( result );
 		}
 
-		[Fact]
+        [Fact]
+        public async void Test_GetAllByCompanyAndCategoryWithLimitAsync()
+        {
+            IEnumerable<Models.Domains.Task>? result = null;
+            try
+            {
+                result = await _repository.GetAllByCompanyAndCategoryWithLimitAsync(1, TaskCategories.Inquiry, 0, 5);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
 		public async void Test_GetByIdAsync() {
 			Models.Domains.Task? result = null;
 			try {

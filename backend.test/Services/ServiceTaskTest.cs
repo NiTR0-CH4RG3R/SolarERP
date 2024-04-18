@@ -32,7 +32,7 @@ namespace backend.test.Services {
 
 			_logger = factory.CreateLogger<ServiceCustomer>();
 
-			_connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=BlackDragon321@b;Port=3306" );
+			_connection = new MySqlConnection( "Server=localhost;Database=new_erp;Uid=root;Pwd=;Port=3306" );
 			_connection.Open();
 
 			_repositoryParticipant = new RepositoryParticipant( _connection );
@@ -117,8 +117,58 @@ namespace backend.test.Services {
 			Assert.NotNull( result );
 		}
 
-		
 
+		[Fact]
 
-	}
+		public async void Test_GetAllByCategory()
+		{
+            IEnumerable<GetTaskDTO>? result = null;
+
+            try
+            {
+                result = await _serviceTask.GetAllByCategory(3, TaskCategories.Inquiry, 1, 5);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+
+		[Fact]
+		public async void Test_GetAllByUrgencyLevel()
+        {
+            IEnumerable<GetTaskDTO>? result = null;
+
+            try
+            {
+                result = await _serviceTask.GetAllByUrgencyLevel(3, TaskUrgencyLevel.Critical, 1, 5);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async void Test_GetAllByAssignedTo()
+        {
+            IEnumerable<GetTaskDTO>? result = null;
+
+            try
+            {
+                result = await _serviceTask.GetAllByAssignedTo(3, 1, 5);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            Assert.NotNull(result);
+        }
+
+    }
 }
