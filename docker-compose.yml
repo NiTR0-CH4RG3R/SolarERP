@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  backend:
+    image: ${DOCKER_REGISTRY-}backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - backend:/app/wwwroot/uploads
+  
+  
+
+volumes:
+  backend:
