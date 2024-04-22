@@ -18,22 +18,6 @@ namespace backend.Services {
 			// Check if the user is an employee
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			// Create the customer
-			//Participant newCustomer = new Participant {
-			//	CompanyId = companyId,
-			//	FirstName = customer.FirstName,
-			//	LastName = customer.LastName,
-			//	Category = customer.Category,
-			//	Address = customer.Address,
-			//	Email = customer.Email,
-			//	Phone01 = customer.Phone01,
-			//	Phone02 = customer.Phone02,
-			//	CustomerRegistrationNumber = customer.CustomerRegistrationNumber,
-			//	Profession = customer.Profession,
-			//	Comments = customer.Comments,
-			//	LastUpdatedBy = userId,
-			//};
-
 			Participant newCustomer = _mapper.Map<Participant>( customer );
 			newCustomer.CompanyId = companyId;
 
@@ -49,22 +33,6 @@ namespace backend.Services {
 			if ( result == null ) {
 				throw new Exception( "Customer not created" );
 			}
-
-			//return new GetCustomerDTO {
-			//	Id = result.Id,
-			//	FirstName = result.FirstName,
-			//	LastName = result.LastName,
-			//	Category = result.Category,
-			//	Address = result.Address,
-			//	Email = result.Email,
-			//	Phone01 = result.Phone01,
-			//	Phone02 = result.Phone02,
-			//	CustomerRegistrationNumber = result.CustomerRegistrationNumber,
-			//	Profession = result.Profession,
-			//	Comments = result.Comments,
-			//	LastUpdatedBy = result.LastUpdatedBy,
-			//	LastUpdatedDateTime = result.LastUpdatedDateTime,
-			//};
 
 			return _mapper.Map<GetCustomerDTO>( result );
 
@@ -90,25 +58,7 @@ namespace backend.Services {
 				throw new Exception( "No customers found" );
 			}
 
-			List<GetCustomerDTO> customers = new List<GetCustomerDTO>();
-
-			foreach ( var result in results ) {
-				customers.Add( new GetCustomerDTO {
-					Id = result.Id,
-					FirstName = result.FirstName,
-					LastName = result.LastName,
-					Category = result.Category,
-					Address = result.Address,
-					Email = result.Email,
-					Phone01 = result.Phone01,
-					Phone02 = result.Phone02,
-					CustomerRegistrationNumber = result.CustomerRegistrationNumber,
-					Profession = result.Profession,
-					Comments = result.Comments,
-					LastUpdatedBy = result.LastUpdatedBy,
-					LastUpdatedDateTime = result.LastUpdatedDateTime,
-				} );
-			}
+			var customers = _mapper.Map<IEnumerable<GetCustomerDTO>>( results );
 
 			return customers;
 		}
@@ -129,25 +79,7 @@ namespace backend.Services {
 				throw new Exception( "No customers found" );
 			}
 
-			List<GetCustomerDTO> customers = new List<GetCustomerDTO>();
-
-			foreach ( var result in results ) {
-				customers.Add( new GetCustomerDTO {
-					Id = result.Id,
-					FirstName = result.FirstName,
-					LastName = result.LastName,
-					Category = result.Category,
-					Address = result.Address,
-					Email = result.Email,
-					Phone01 = result.Phone01,
-					Phone02 = result.Phone02,
-					CustomerRegistrationNumber = result.CustomerRegistrationNumber,
-					Profession = result.Profession,
-					Comments = result.Comments,
-					LastUpdatedBy = result.LastUpdatedBy,
-					LastUpdatedDateTime = result.LastUpdatedDateTime,
-				} );
-			}
+			List<GetCustomerDTO> customers = _mapper.Map<List<GetCustomerDTO>>( results );
 
 			return customers;
 		}
@@ -166,41 +98,14 @@ namespace backend.Services {
 				throw new Exception( "No customer found" );
 			}
 
-			return new GetCustomerDTO {
-				Id = result.Id,
-				FirstName = result.FirstName,
-				LastName = result.LastName,
-				Category = result.Category,
-				Address = result.Address,
-				Email = result.Email,
-				Phone01 = result.Phone01,
-				Phone02 = result.Phone02,
-				CustomerRegistrationNumber = result.CustomerRegistrationNumber,
-				Profession = result.Profession,
-				Comments = result.Comments,
-				LastUpdatedBy = result.LastUpdatedBy,
-				LastUpdatedDateTime = result.LastUpdatedDateTime,
-			};
+			return _mapper.Map<GetCustomerDTO>(result);
 		}
 
 		public async Task<GetCustomerDTO> UpdateAsync( int userId, int id, AddCustomerDTO customer ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			Participant updatedCustomer = new Participant {
-				Id = id,
-				CompanyId = companyId,
-				FirstName = customer.FirstName,
-				LastName = customer.LastName,
-				Category = customer.Category,
-				Address = customer.Address,
-				Email = customer.Email,
-				Phone01 = customer.Phone01,
-				Phone02 = customer.Phone02,
-				CustomerRegistrationNumber = customer.CustomerRegistrationNumber,
-				Profession = customer.Profession,
-				Comments = customer.Comments,
-				LastUpdatedBy = userId,
-			};
+			Participant updatedCustomer = _mapper.Map<Participant>( customer );
+			updatedCustomer.Id = id;
 
 			Participant? result = null;
 
@@ -215,21 +120,7 @@ namespace backend.Services {
 				throw new Exception( "Customer not updated" );
 			}
 
-			return new GetCustomerDTO {
-				Id = result.Id,
-				FirstName = result.FirstName,
-				LastName = result.LastName,
-				Category = result.Category,
-				Address = result.Address,
-				Email = result.Email,
-				Phone01 = result.Phone01,
-				Phone02 = result.Phone02,
-				CustomerRegistrationNumber = result.CustomerRegistrationNumber,
-				Profession = result.Profession,
-				Comments = result.Comments,
-				LastUpdatedBy = result.LastUpdatedBy,
-				LastUpdatedDateTime = result.LastUpdatedDateTime,
-			};
+			return _mapper.Map< GetCustomerDTO>(result);
 		}
 	}
 }
