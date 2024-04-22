@@ -9,5 +9,11 @@ namespace backend.Repositories.Interfaces {
 		Task<SystemUser> CreateAsync( SystemUser systemUser );
 		Task<SystemUser> UpdateAsync( SystemUser systemUser );
 		Task<Boolean> DeleteAsync( Int32 id );
+
+		Task<SystemUserLogin> InsertSystemUserLoginAsync( SystemUserLogin systemUserLogin );
+		Task<SystemUserLogin> GetSystemUserLoginByIdAsync( Int32 id );
+		Task<SystemUserLogin> UpdateSystemUserLoginAccessTokenAsync( Int32 id, String accessToken );
+		void DeleteSystemUserLoginByIdAsync( Int32 id );
 	}
+
 }

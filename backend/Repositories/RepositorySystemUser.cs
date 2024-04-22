@@ -80,5 +80,45 @@ namespace backend.Repositories {
 
 			return result.First();
 		}
+
+		public async Task<SystemUserLogin> InsertSystemUserLoginAsync( SystemUserLogin systemUserLogin ) {
+			String sp = "spInsertSystemUserLogin";
+			var result = await _connection.QueryAsync<SystemUserLogin>( sp, new { 
+				systemUserId = systemUserLogin.SystemUserId, 
+				accessToken =  systemUserLogin.AccessToken,
+				refreshToken = systemUserLogin.RefreshToken
+			}, commandType: CommandType.StoredProcedure );
+			if ( result == null ) {
+				throw new Exception( "No system user login was created" );
+			}
+
+			return result.First();
+		}
+
+		public async Task<SystemUserLogin> GetSystemUserLoginByIdAsync( Int32 id ) {
+			String sp = "spSelectSystemUserLoginById";
+			var result = await _connection.QueryAsync<SystemUserLogin>( sp, new { systemUserId = id }, commandType: CommandType.StoredProcedure );
+			if ( result == null ) {
+				throw new Exception( "No system user login was found" );
+			}
+			return result.First();
+		}
+
+		public async Task<SystemUserLogin> UpdateSystemUserLoginAccessTokenAsync( Int32 id, String accessToken ) {
+			String sp = "spUpdateSystemUserLoginAccessToken";
+
+			var result = await _connection.QueryAsync<SystemUserLogin>( sp, new { systemUserId = id, accessToken }, commandType: CommandType.StoredProcedure );
+
+			if ( result == null ) {
+				throw new Exception( "No system user login was updated" );
+			}
+
+			return result.First();
+		}
+
+		public async void DeleteSystemUserLoginByIdAsync( Int32 id ) {
+			String sp = "spDeleteSystemUserLogin";
+			await _connection.QueryAsync( sp, new { systemUserId = id }, commandType: CommandType.StoredProcedure );
+		}
 	}
 }
