@@ -64,7 +64,11 @@ namespace backend {
 			builder.Services.AddSingleton( MapperConfig.Configure().CreateMapper() );
 
 			// Add the database service
-			builder.Services.AddScoped<IDbConnection, MySqlConnection>( x => new MySqlConnection( builder.Configuration.GetConnectionString( "DefaultConnection" ) ) );
+			builder.Services.AddScoped<IDbConnection, MySqlConnection>( (x) => {
+				MySqlConnection mySqlConnection = new MySqlConnection( builder.Configuration.GetConnectionString( "DefaultConnection" ) );
+				mySqlConnection.Open();
+				return mySqlConnection; 
+			} );
 
 			// Add our repositories
 			builder.Services.AddScoped<IRepositoryCompany, RepositoryCompany>();
