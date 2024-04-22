@@ -54,6 +54,7 @@ namespace backend.Controllers {
 			}
 		}
 
+		[AllowAnonymous]
 		[HttpPost( "refresh" )]
 		public async Task<IActionResult> Refresh( [FromQuery] Int32 userId ) {
 			try {
