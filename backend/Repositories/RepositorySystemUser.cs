@@ -117,8 +117,8 @@ namespace backend.Repositories {
 		}
 
 		public async void DeleteSystemUserLoginByIdAsync( Int32 id ) {
-			String sp = "spDeleteSystemUserLogin";
-			await _connection.QueryAsync( sp, new { systemUserId = id }, commandType: CommandType.StoredProcedure );
+			String sp = "spDleeteSystemUserLogin";
+			await _connection.ExecuteAsync( sp, param: new { systemUserId = id }, commandType: CommandType.StoredProcedure );
 		}
 	}
 }
