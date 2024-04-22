@@ -37,7 +37,11 @@ namespace backend.test.Services {
 			_repositoryParticipant = new RepositoryParticipant( _connection );
 			_repositorySystemUser = new RepositorySystemUser( _connection );
 
-			_serviceSystemUser = new ServiceSystemUser( _repositoryParticipant, _repositorySystemUser, _logger );
+			// Create a dummy mapper
+			//_serviceCustomer = new ServiceCustomer( _repositoryParticipant, _repositorySystemUser, _logger );
+
+
+			_serviceSystemUser = new ServiceSystemUser( _repositoryParticipant, _repositorySystemUser, _logger,  new AutoMapper.Mapper(MapperConfig.Configure()));
 		}
 
 		[Fact]

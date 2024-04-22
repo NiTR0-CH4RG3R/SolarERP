@@ -5,6 +5,7 @@ using backend.Services;
 using backend.Services.Interfaces;
 using backend.test.Repositories;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,10 @@ namespace backend.test.Services {
 
 			_repositorySystemUser = new RepositorySystemUser( _connection );
 
-			_service = new ServiceAuthentication( _repositorySystemUser, _configuration );
+			// create a dummy logger
+			ILogger<ServiceAuthentication> logger = new LoggerFactory().CreateLogger<ServiceAuthentication>();
+
+			_service = new ServiceAuthentication( _repositorySystemUser, _configuration, logger );
 		}
 
 		[Fact]
