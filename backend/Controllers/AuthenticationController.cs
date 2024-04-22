@@ -3,6 +3,7 @@ using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata.Ecma335;
 
 namespace backend.Controllers {
@@ -56,12 +57,18 @@ namespace backend.Controllers {
 
 		[AllowAnonymous]
 		[HttpPost( "refresh" )]
-		public async Task<IActionResult> Refresh( [FromQuery] Int32 userId ) {
+		public async Task<IActionResult> Refresh( ) {
 			try {
 				var refreshToken = HttpContext.Request.Cookies["refresh_token"];
 				if ( refreshToken == null ) {
 						return Unauthorized();
 				}
+
+				// This is a hack to get the user id from the token
+				// Decode the token and get the user id
+				JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+				JwtSecurityToken jwtToken = (JwtSecurityToken) tokenHandler.ReadToken( refreshToken );
+				var userId = Int32.Parse(jwtToken.Claims.First( c => c.Type == "userId" ).Value);
 
 				var result = await _serviceAuthentication.Refresh( userId, refreshToken );
 
