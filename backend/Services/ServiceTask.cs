@@ -175,8 +175,9 @@ namespace backend.Services {
 					CallBackNumber = task.CallBackNumber,
 					ProjectId = task.ProjectId,
 					RequestedBy = task.RequestedBy,
-					UrgencyLevel = task.UrgencyLevel
-				} );
+					UrgencyLevel = task.UrgencyLevel,
+                    Status = task.Status
+                } );
 			}
 
 			return tasksDTO;
@@ -249,7 +250,8 @@ namespace backend.Services {
                     CallBackNumber = task.CallBackNumber,
                     ProjectId = task.ProjectId,
                     RequestedBy = task.RequestedBy,
-                    UrgencyLevel = task.UrgencyLevel
+                    UrgencyLevel = task.UrgencyLevel,
+                    Status = task.Status
                 });
             }
 
@@ -339,7 +341,8 @@ namespace backend.Services {
                     CallBackNumber = task.CallBackNumber,
                     ProjectId = task.ProjectId,
                     RequestedBy = task.RequestedBy,
-                    UrgencyLevel = task.UrgencyLevel
+                    UrgencyLevel = task.UrgencyLevel,
+                    Status = task.Status
                 });
             }
 
