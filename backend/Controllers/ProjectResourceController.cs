@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers {
 	[Route( "api/[controller]" )]
 	[ApiController]
-	public class ProjectResourceController( IServiceProjectResource _serviceProjectResource, ILogger<ProjectResourceController> _logger )  : ControllerBase {
+	public class ProjectResourceController( IServiceProjectResource _serviceProjectResource, IServiceFileManager _serviceFileManager, ILogger<ProjectResourceController> _logger )  : ControllerBase {
 
 
 		[HttpGet( "all" )]
@@ -73,6 +73,18 @@ namespace backend.Controllers {
 			try {
 				await _serviceProjectResource.DeleteAsync( userId, id );
 				return Ok();
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+				return BadRequest( ex.Message );
+			}
+		}
+
+		[HttpPost( "upload" )]
+		public async Task<IActionResult> Post( [FromQuery] Int32 userId, IFormFile formFile ) {
+			try {
+				var result = await _serviceFileManager.SaveFileAsync( userId, formFile, "projects/resources" );
+				return Ok( result );
 			}
 			catch ( Exception ex ) {
 				_logger.LogError( ex, ex.Message );

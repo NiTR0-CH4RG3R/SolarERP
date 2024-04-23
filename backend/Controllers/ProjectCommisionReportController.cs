@@ -1,4 +1,5 @@
 ﻿using backend.Models.DTO.ProjectCommisionReport;
+using backend.Services;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,12 @@ namespace backend.Controllers {
 	[ApiController]
 	public class ProjectCommisionReportController : ControllerBase {
 		private readonly IServiceProjectCommisionReport _serviceProjectCommisionReport;
+		private readonly IServiceFileManager _serviceFileManager;
 		private readonly ILogger<ProjectCommisionReportController> _logger;
 
-		public ProjectCommisionReportController( IServiceProjectCommisionReport serviceProjectCommisionReport, ILogger<ProjectCommisionReportController> logger ) {
+		public ProjectCommisionReportController( IServiceProjectCommisionReport serviceProjectCommisionReport, IServiceFileManager serviceFileManager, ILogger<ProjectCommisionReportController> logger ) {
 			_serviceProjectCommisionReport = serviceProjectCommisionReport;
+			_serviceFileManager = serviceFileManager;
 			_logger = logger;
 		}
 
@@ -78,6 +81,18 @@ namespace backend.Controllers {
 		public async Task<IActionResult> Delete( [FromQuery] Int32 userId, [FromRoute] Int32 id ) {
 			try {
 				var result = await _serviceProjectCommisionReport.DeleteAsync( userId, id );
+				return Ok( result );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+				return BadRequest( ex.Message );
+			}
+		}
+
+		[HttpPost( "upload" )]
+		public async Task<IActionResult> Post( [FromQuery] Int32 userId, IFormFile formFile ) {
+			try {
+				var result = await _serviceFileManager.SaveFileAsync( userId, formFile, "projects/commision_reports" );
 				return Ok( result );
 			}
 			catch ( Exception ex ) {

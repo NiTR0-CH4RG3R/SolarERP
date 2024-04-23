@@ -1,4 +1,5 @@
 ﻿using backend.Models.DTO.ProjectService;
+using backend.Services;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,13 @@ namespace backend.Controllers {
 	public class ProjectServiceController : ControllerBase {
 		
 		private readonly IServiceProjectService _serviceProjectService;
+		private readonly IServiceFileManager _serviceFileManager;
 		private readonly ILogger<ProjectServiceController> _logger;
 
-		public ProjectServiceController( IServiceProjectService serviceProjectService, ILogger<ProjectServiceController> logger ) {
+		public ProjectServiceController( IServiceProjectService serviceProjectService,  ILogger<ProjectServiceController> logger, IServiceFileManager serviceFileManager ) {
 			_serviceProjectService = serviceProjectService;
 			_logger = logger;
+			_serviceFileManager = serviceFileManager;
 		}
 
 		[HttpGet( "all" )]
@@ -67,6 +70,18 @@ namespace backend.Controllers {
 		public async Task<IActionResult> Put( [FromQuery] Int32 userId, [FromRoute] Int32 id, [FromBody] AddProjectServiceDTO projectService ) {
 			try {
 				var result = await _serviceProjectService.UpdateAsync( userId, id, projectService );
+				return Ok( result );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+				return BadRequest( ex.Message );
+			}
+		}
+
+		[HttpPost( "upload" )]
+		public async Task<IActionResult> Post( [FromQuery] Int32 userId, IFormFile formFile ) {
+			try {
+				var result = await _serviceFileManager.SaveFileAsync( userId, formFile, "projects/service_reports" );
 				return Ok( result );
 			}
 			catch ( Exception ex ) {

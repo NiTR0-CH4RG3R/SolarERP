@@ -10,10 +10,12 @@ namespace backend.Controllers {
 	public class SystemUserController : ControllerBase {
 
 		private readonly IServiceSystemUser _serviceSystemUser;
+		private readonly IServiceFileManager _serviceFileManager;
 		private readonly ILogger<SystemUserController> _logger;
 
-		public SystemUserController( IServiceSystemUser serviceSystemUser, ILogger<SystemUserController> logger ) {
+		public SystemUserController( IServiceSystemUser serviceSystemUser, IServiceFileManager serviceFileManager, ILogger<SystemUserController> logger  ) {
 			_serviceSystemUser = serviceSystemUser;
+			_serviceFileManager = serviceFileManager;
 			_logger = logger;
 		}
 
@@ -74,6 +76,18 @@ namespace backend.Controllers {
 			catch ( Exception e ) {
 				_logger.LogError( e.Message );
 				return BadRequest( e.Message );
+			}
+		}
+
+		[HttpPost( "upload" )]
+		public async Task<IActionResult> Post( [FromQuery] Int32 userId, IFormFile formFile ) {
+			try {
+				var result = await _serviceFileManager.SaveFileAsync( userId, formFile, "system_user/profiles" );
+				return Ok( result );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+				return BadRequest( ex.Message );
 			}
 		}
 	}

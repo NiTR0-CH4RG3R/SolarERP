@@ -1,4 +1,5 @@
 ﻿using backend.Models.DTO.TaskResource;
+using backend.Services;
 using backend.Services.Interfaces;
 using backend.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -10,11 +11,13 @@ namespace backend.Controllers {
 	public class TaskResourceController : ControllerBase {
 
 		private readonly IServiceTaskResource _serviceTaskResource;
+		private readonly IServiceFileManager _serviceFileManager;
 		private readonly ILogger<TaskResourceController> _logger;
 
-		public TaskResourceController( IServiceTaskResource serviceTaskResource, ILogger<TaskResourceController> logger ) {
+		public TaskResourceController( IServiceTaskResource serviceTaskResource,  ILogger<TaskResourceController> logger, IServiceFileManager serviceFileManager ) {
 			_serviceTaskResource = serviceTaskResource;
 			_logger = logger;
+			_serviceFileManager = serviceFileManager;
 		}
 
 		[HttpGet]
@@ -67,7 +70,18 @@ namespace backend.Controllers {
 				return BadRequest( ex.Message );
 			}
 		}
-		
+
+		[HttpPost( "upload" )]
+		public async Task<IActionResult> Post( [FromQuery] Int32 userId, IFormFile formFile ) {
+			try {
+				var result = await _serviceFileManager.SaveFileAsync( userId, formFile, "task/resources" );
+				return Ok( result );
+			}
+			catch ( Exception ex ) {
+				_logger.LogError( ex, ex.Message );
+				return BadRequest( ex.Message );
+			}
+		}
 
 	}
 }
