@@ -45,6 +45,7 @@ namespace backend.Repositories
             return result;
         }
 
+
         public async Task<ProjectService> GetByIdAsync(int id)
         {
             string sp = "spSelectProjectServiceById";
@@ -72,6 +73,18 @@ namespace backend.Repositories
             }
 
             throw new Exception( "No any Project Service Updataed");
+        }
+
+        public async Task<IEnumerable<ProjectService>> GetAllProjectsByPendingStatusWithLimitAsync(int companyId, ProjectService.ProjectServiceStatus status, int offset, int count)
+        {
+            String sp = "spSelectProjectServiceByCompanyIdAndStatus";
+
+            var result = await _connection.QueryAsync<Models.Domains.ProjectService>(sp, new { CompanyId = companyId, Status = status.ToString(), offset, count }, commandType: CommandType.StoredProcedure);
+            if (result == null)
+            {
+                throw new Exception("No data Found");
+            }
+            return result;
         }
     }
 }
