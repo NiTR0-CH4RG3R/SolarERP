@@ -7,9 +7,11 @@ using backend.Repositories;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.ComponentModel.Design;
+using System.Numerics;
 using System.Security.Policy;
 using System.Threading.Tasks;
 
@@ -22,19 +24,28 @@ namespace backend.Services
         IRepositoryTask _repositoryTask;
         IRepositoryTaskResource _repositoryTaskResource;
         ILogger<ServiceCustomer> _logger;
+        IValidator<AddTaskResourceDTO> _validator;
 
-        public ServiceTaskResource(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryTask repositoryTask, IRepositoryTaskResource repositoryTaskResource, ILogger<ServiceCustomer> logger)
+        public ServiceTaskResource(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryTask repositoryTask, IRepositoryTaskResource repositoryTaskResource, ILogger<ServiceCustomer> logger, IValidator<AddTaskResourceDTO> validator )
         {
             _repositoryParticipant = repositoryParticipant;
             _repositorySystemUser = repositorySystemUser;
             _repositoryTask = repositoryTask;
             _repositoryTaskResource = repositoryTaskResource;
             _logger = logger;
+            _validator = validator;
         }
         public async Task<GetTaskResourceDTO> CreateAsync(int userId, AddTaskResourceDTO taskResource)
         {
             Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
             Models.Domains.Task? task = null;
+
+            //validation
+            var validateResult = await _validator.ValidateAsync(taskResource);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
 
             try
             {
