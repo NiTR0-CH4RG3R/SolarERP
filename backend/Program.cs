@@ -70,6 +70,8 @@ namespace backend {
 				return mySqlConnection; 
 			} );
 
+			builder.Services.AddScoped<IServiceFileManager, ServiceFileManager>();
+
 			// Add our repositories
 			builder.Services.AddScoped<IRepositoryCompany, RepositoryCompany>();
 			builder.Services.AddScoped<IRepositoryParticipant, RepositoryParticipant>();
