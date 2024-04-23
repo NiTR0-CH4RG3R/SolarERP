@@ -3,6 +3,7 @@ using backend.Services;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static backend.Models.Domains.ProjectService;
 
 namespace backend.Controllers {
 	[Route( "api/[controller]" )]
@@ -21,16 +22,33 @@ namespace backend.Controllers {
 
 		[HttpGet( "all" )]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId ) {
-			try {
-				throw new NotImplementedException();
-			}
-			catch ( Exception ex ) {
-				_logger.LogError( ex, ex.Message );
-				return BadRequest( ex.Message );
-			}
-		}
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
 
-		[HttpPost]
+        [HttpGet("status")]
+        public async Task<IActionResult> GetAllPendingServiceProjects([FromQuery] Int32 userId, [FromQuery] ProjectServiceStatus status, [FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+        {
+            try
+            {
+                var result = await _serviceProjectService.GetAllProjectsByPendingStatusAsync( userId, status, page, pageSize );
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
 		public async Task<IActionResult> Post( [FromQuery] Int32 userId, [FromBody] AddProjectServiceDTO projectService ) {
 			try {
 				var result = await _serviceProjectService.CreateAsync( userId, projectService );
