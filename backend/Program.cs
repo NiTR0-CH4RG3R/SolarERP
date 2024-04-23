@@ -8,6 +8,7 @@ using backend.Models.DTO.ProjectService;
 using backend.Models.DTO.ProjectTest;
 using backend.Models.DTO.SystemUser;
 using backend.Models.DTO.Task;
+using backend.Models.DTO.TaskResource;
 using backend.Models.DTO.Vendor;
 using backend.Repositories;
 using backend.Repositories.Interfaces;
@@ -137,6 +138,7 @@ namespace backend {
             builder.Services.AddTransient<IValidator<AddProjectServiceDTO>, ProjectServiceValidator>();
             builder.Services.AddTransient<IValidator<AddProjectTestDTO>, ProjectTestValidator>();
             builder.Services.AddTransient<IValidator<AddSystemUserDTO>, SystemUserValidator>();
+            builder.Services.AddTransient<IValidator<AddTaskResourceDTO>, TaskResourceValidator>();
 
             var app = builder.Build();
 
