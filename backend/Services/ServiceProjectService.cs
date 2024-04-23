@@ -5,6 +5,8 @@ using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using static backend.Models.Domains.ProjectService;
 
 namespace backend.Services
 {
@@ -210,6 +212,50 @@ namespace backend.Services
             }
 
             return projectServicesDTO;
+        }
+
+        public async Task<IEnumerable<GetProjectServiceDTO>> GetAllProjectsByPendingStatusAsync(int userId, ProjectServiceStatus status, int page, int pageSize)
+        {
+            Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
+
+            IEnumerable<ProjectService>? projectServices = null;
+
+            try
+            {
+                projectServices = await _repositoryProjectService.GetAllProjectsByPendingStatusWithLimitAsync(companyId, status, (page - 1) * pageSize, pageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            if(projectServices == null)
+            {
+                throw new Exception("No project services were found");
+            }
+
+            List<GetProjectServiceDTO> projectServiceDTO = new List<GetProjectServiceDTO>();
+
+            foreach(Models.Domains.ProjectService projectService in projectServices)
+            {
+                projectServiceDTO.Add(new GetProjectServiceDTO
+                {
+                    Id = projectService.Id,
+                    ProjectId = projectService.ProjectId,
+                    PlannedDate = projectService.PlannedDate,
+                    Status = projectService.Status,
+                    ConductedBy = projectService.ConductedBy,
+                    ConductedDate = projectService.ConductedDate,
+                    Priority = projectService.Priority,
+                    Description = projectService.Description,
+                    ServiceReportURL = projectService.ServiceReportURL,
+                    ServiceLevel = projectService.ServiceLevel,
+                    LastUpdatedBy = projectService.LastUpdatedBy,
+                    LastUpdatedDateTime = projectService.LastUpdatedDateTime,
+                });
+            }
+             return projectServiceDTO;
+
         }
 
 
