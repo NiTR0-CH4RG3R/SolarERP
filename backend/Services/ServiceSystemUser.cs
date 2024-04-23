@@ -3,7 +3,9 @@ using backend.Models.DTO.SystemUser;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Numerics;
 
 namespace backend.Services {
 	public class ServiceSystemUser : IServiceSystemUser {
@@ -11,17 +13,26 @@ namespace backend.Services {
 		IRepositoryParticipant _repositoryParticipant;
 		IRepositorySystemUser _repositorySystemUser;
 		ILogger<ServiceCustomer> _logger;
+        IValidator<AddSystemUserDTO> _validator;
 
-		public ServiceSystemUser( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, ILogger<ServiceCustomer> logger ) {
+        public ServiceSystemUser( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, ILogger<ServiceCustomer> logger, IValidator<AddSystemUserDTO> validator ) {
 			_repositoryParticipant = repositoryParticipant;
 			_repositorySystemUser = repositorySystemUser;
 			_logger = logger;
-		}
+            _validator = validator;
+        }
 
 		public async Task<GetSystemUserDTO> CreateAsync( int userId, AddSystemUserDTO systemUser ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-			Participant participantToCreate = new Participant {
+            //validation
+            var validateResult = await _validator.ValidateAsync(systemUser);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
+
+            Participant participantToCreate = new Participant {
 				FirstName = systemUser.FirstName,
 				LastName = systemUser.LastName,
 				Category = ParticipantCategory.Employee.ToString(),
@@ -258,7 +269,14 @@ namespace backend.Services {
 			
 			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-			Participant participantToUpdate = new Participant {
+            //validation
+            var validateResult = await _validator.ValidateAsync(systemUser);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
+
+            Participant participantToUpdate = new Participant {
 				Id = id,
 				FirstName = systemUser.FirstName,
 				LastName = systemUser.LastName,

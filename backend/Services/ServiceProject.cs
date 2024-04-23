@@ -3,6 +3,7 @@ using backend.Models.DTO.Project;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using FluentValidation;
 
 namespace backend.Services {
 	public class ServiceProject : IServiceProject {
@@ -11,16 +12,25 @@ namespace backend.Services {
 		IRepositorySystemUser _repositorySystemUser;
 		IRepositoryProject _repositoryProject;
 		ILogger<ServiceCustomer> _logger;
+        IValidator<AddProjectDTO> _validator;
 
-		public ServiceProject( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, ILogger<ServiceCustomer> logger ) {
+        public ServiceProject( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, ILogger<ServiceCustomer> logger, IValidator<AddProjectDTO> validator ) {
 			_repositoryParticipant = repositoryParticipant;
 			_repositorySystemUser = repositorySystemUser;
 			_repositoryProject = repositoryProject;
 			_logger = logger;
-		}
+            _validator = validator;
+        }
 
 		public async Task<GetProjectDTO> CreateAsync( int userId, AddProjectDTO project ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
+
+			//validation
+			var validateResult = await _validator.ValidateAsync(project);
+			if ( !validateResult.IsValid )
+			{
+				throw new FluentValidation.ValidationException(validateResult.Errors);
+			}
 
 			Project projectToCreate = new Project {
 				Id = null,
@@ -281,7 +291,14 @@ namespace backend.Services {
 		public async Task<GetProjectDTO> UpdateAsync( int userId, int id, AddProjectDTO project ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			Project projectToUpdate = new Project {
+            //validation
+            var validateResult = await _validator.ValidateAsync(project);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
+
+            Project projectToUpdate = new Project {
 				Id = id,
 				CompanyId = companyId,
 				Address = project.Address,

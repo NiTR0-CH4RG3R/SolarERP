@@ -4,10 +4,14 @@ using backend.Models.DTO.ProjectCommisionReport;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using FluentValidation;
 
 namespace backend.Services {
-	public class ServiceProjectCommisionReport( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectCommisionReport repositoryProjectCommisionReport, IMapper mapper, ILogger<ServiceCustomer> logger ) : IServiceProjectCommisionReport {
-		public async Task<GetProjectCommisionReportDTO> CreateAsync( int userId, AddProjectCommisionReportDTO projectCommisionReport ) {
+	public class ServiceProjectCommisionReport( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectCommisionReport repositoryProjectCommisionReport, IMapper mapper, ILogger<ServiceCustomer> logger, IValidator<AddProjectCommisionReportDTO> validator ) : IServiceProjectCommisionReport {
+
+        IValidator<AddProjectCommisionReportDTO> _validator = validator;
+
+        public async Task<GetProjectCommisionReportDTO> CreateAsync( int userId, AddProjectCommisionReportDTO projectCommisionReport ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( logger, repositoryParticipant, repositorySystemUser, userId );
 			
 			Project? project = null;
@@ -21,6 +25,13 @@ namespace backend.Services {
 
 			if ( project == null || project.CompanyId != companyId ) {
 				throw new Exception( "Project not found" );
+			}
+
+			//Validation
+			var validateResult = await _validator.ValidateAsync( projectCommisionReport );
+			if ( !validateResult.IsValid )
+			{
+				throw new FluentValidation.ValidationException(validateResult.Errors);
 			}
 
 			ProjectCommisionReport projectCommisionReportToCreate = mapper.Map<ProjectCommisionReport>(projectCommisionReport);

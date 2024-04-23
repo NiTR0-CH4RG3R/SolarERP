@@ -1,5 +1,14 @@
 
 using AutoMapper;
+using backend.Models.DTO.Customer;
+using backend.Models.DTO.Project;
+using backend.Models.DTO.ProjectCommisionReport;
+using backend.Models.DTO.ProjectItem;
+using backend.Models.DTO.ProjectService;
+using backend.Models.DTO.ProjectTest;
+using backend.Models.DTO.SystemUser;
+using backend.Models.DTO.Task;
+using backend.Models.DTO.Vendor;
 using backend.Repositories;
 using backend.Repositories.Interfaces;
 using backend.Services;
@@ -9,6 +18,12 @@ using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Text;
+using backend.Validations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MySql.Data.MySqlClient;
+using System.Data;
+using System.Reflection;
 
 namespace backend {
 	public class Program {
@@ -105,7 +120,25 @@ namespace backend {
 			builder.Services.AddScoped<IServiceProjectResource, ServiceProjectResource>();
 			builder.Services.AddScoped<IServiceProjectCommisionReport, ServiceProjectCommisionReport>();
 
-			var app = builder.Build();
+			//Add Fluent Validations
+			builder.Services.AddControllers()
+				.AddFluentValidation(v =>
+				{
+					v.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+				});
+
+            // Register Validators from Validation Layer
+            builder.Services.AddTransient<IValidator<AddTaskDTO>, TaskValidator>();
+			builder.Services.AddTransient<IValidator<AddCustomerDTO>, CustomerValidator>();
+            builder.Services.AddTransient<IValidator<AddProjectDTO>, ProjectValidator>();
+            builder.Services.AddTransient<IValidator<AddProjectCommisionReportDTO>, ProjectCommisionReportValidator>();
+            builder.Services.AddTransient<IValidator<AddVendorDTO>, VendorValidator>();
+            builder.Services.AddTransient<IValidator<AddProjectItemDTO>, ProjectItemValidator>();
+            builder.Services.AddTransient<IValidator<AddProjectServiceDTO>, ProjectServiceValidator>();
+            builder.Services.AddTransient<IValidator<AddProjectTestDTO>, ProjectTestValidator>();
+            builder.Services.AddTransient<IValidator<AddSystemUserDTO>, SystemUserValidator>();
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if ( app.Environment.IsDevelopment() ) {

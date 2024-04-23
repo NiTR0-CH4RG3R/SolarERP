@@ -3,6 +3,9 @@ using backend.Models.DTO.Task;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Utilities;
+using FluentValidation;
+using FluentValidation.Results;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Services {
 	public class ServiceTask : IServiceTask {
@@ -11,18 +14,26 @@ namespace backend.Services {
 		IRepositorySystemUser _repositorySystemUser;
 		IRepositoryTask _repositoryTask;
 		ILogger<ServiceCustomer> _logger;
+        IValidator<AddTaskDTO> _validator;
 
-		public ServiceTask( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryTask repositoryTask, ILogger<ServiceCustomer> logger ) {
+        public ServiceTask( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryTask repositoryTask, ILogger<ServiceCustomer> logger, IValidator<AddTaskDTO> validator ) {
 			_repositoryParticipant = repositoryParticipant;
 			_repositorySystemUser = repositorySystemUser;
 			_repositoryTask = repositoryTask;
 			_logger = logger;
-		}
+            _validator = validator;
+        }
 
 		public async Task<GetTaskDTO> CreateAsync( int userId, AddTaskDTO task ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			Models.Domains.Task taskToCreate = new Models.Domains.Task {
+			var validationResult = await _validator.ValidateAsync(task);
+            if (!validationResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validationResult.Errors);
+            }
+
+            Models.Domains.Task taskToCreate = new Models.Domains.Task {
 				Id = null,
 				CompanyId = companyId,
 				Description = task.Description,
@@ -277,7 +288,13 @@ namespace backend.Services {
 				UrgencyLevel = task.UrgencyLevel
 			};
 
-			Models.Domains.Task? taskUpdated = null;
+			var validateResult = await _validator.ValidateAsync(task);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
+
+            Models.Domains.Task? taskUpdated = null;
 
 			try {
 				taskUpdated = await _repositoryTask.UpdateAsync( taskToUpdate );
@@ -348,5 +365,6 @@ namespace backend.Services {
 
             return tasksDTO;
         }
+
     }
 }
