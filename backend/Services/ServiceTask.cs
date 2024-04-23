@@ -27,6 +27,7 @@ namespace backend.Services {
 		public async Task<GetTaskDTO> CreateAsync( int userId, AddTaskDTO task ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
+			//Validation
 			var validationResult = await _validator.ValidateAsync(task);
             if (!validationResult.IsValid)
             {
@@ -273,7 +274,14 @@ namespace backend.Services {
 			
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			Models.Domains.Task taskToUpdate = new Models.Domains.Task {
+			//Validation
+            var validateResult = await _validator.ValidateAsync(task);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
+
+            Models.Domains.Task taskToUpdate = new Models.Domains.Task {
 				Id = id,
 				CompanyId = companyId,
 				Description = task.Description,
@@ -287,12 +295,6 @@ namespace backend.Services {
 				RequestedBy = task.RequestedBy,
 				UrgencyLevel = task.UrgencyLevel
 			};
-
-			var validateResult = await _validator.ValidateAsync(task);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
 
             Models.Domains.Task? taskUpdated = null;
 

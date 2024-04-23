@@ -129,16 +129,17 @@ namespace backend.Services {
 		public async Task<GetCustomerDTO> UpdateAsync( int userId, int id, AddCustomerDTO customer ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			Participant updatedCustomer = _mapper.Map<Participant>( customer );
-			updatedCustomer.Id = id;
             //validation
-            var validateResult = await _validator.ValidateAsync( customer );
-			if ( !validateResult.IsValid )
-			{
-				throw new FluentValidation.ValidationException(validateResult.Errors);
-			}
+            var validateResult = await _validator.ValidateAsync(customer);
+            if (!validateResult.IsValid)
+            {
+                throw new FluentValidation.ValidationException(validateResult.Errors);
+            }
 
-			Participant updatedCustomer = new Participant {
+            Participant updatedCustomer = _mapper.Map<Participant>( customer );
+			updatedCustomer.Id = id;
+            
+			updatedCustomer = new Participant {
 				Id = id,
 				CompanyId = companyId,
 				FirstName = customer.FirstName,
