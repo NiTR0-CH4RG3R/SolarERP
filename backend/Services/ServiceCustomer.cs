@@ -129,6 +129,8 @@ namespace backend.Services {
 		public async Task<GetCustomerDTO> UpdateAsync( int userId, int id, AddCustomerDTO customer ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
+			Participant updatedCustomer = _mapper.Map<Participant>( customer );
+			updatedCustomer.CompanyId = companyId;
             //validation
             var validateResult = await _validator.ValidateAsync(customer);
             if (!validateResult.IsValid)
