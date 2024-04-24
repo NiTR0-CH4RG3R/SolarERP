@@ -19,27 +19,20 @@ namespace backend.Services
         IRepositoryProject _repositoryProject;
         IRepositoryProjectService _repositoryProjectService;
         ILogger<ServiceCustomer> _logger;
-        IValidator<AddProjectServiceDTO> _validator;
 
-        public ServiceProjectService(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectService repositoryProjectService, ILogger<ServiceCustomer> logger, IValidator<AddProjectServiceDTO> validator)
+        public ServiceProjectService(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectService repositoryProjectService, ILogger<ServiceCustomer> logger)
         {
             _repositoryParticipant = repositoryParticipant;
             _repositorySystemUser = repositorySystemUser;
             _repositoryProject = repositoryProject;
             _repositoryProjectService = repositoryProjectService;
             _logger = logger;
-            _validator = validator;
         }
         public async Task<GetProjectServiceDTO> CreateAsync(int userId, AddProjectServiceDTO projectService)
         {
             Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-            //validation
-            var validateResult = await _validator.ValidateAsync(projectService);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+
 
             Project? project = null;
 
@@ -309,12 +302,7 @@ namespace backend.Services
 
         public async Task<GetProjectServiceDTO> UpdateAsync(int userId, int id, AddProjectServiceDTO projectService)
         {
-            //validation
-            var validateResult = await _validator.ValidateAsync(projectService);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+
 
             ProjectService projectServiceToUpdate = new ProjectService { Id = null, ProjectId = projectService.ProjectId, PlannedDate = projectService.PlannedDate, Status = projectService.Status, ConductedBy = projectService.ConductedBy, ConductedDate = projectService.ConductedDate, Priority = projectService.Priority, Description = projectService.Description, ServiceReportURL = projectService.ServiceReportURL, ServiceLevel = projectService.ServiceLevel, LastUpdatedBy = userId, LastUpdatedDateTime = DateTime.UtcNow, };
 

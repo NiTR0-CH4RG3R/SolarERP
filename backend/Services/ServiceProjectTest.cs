@@ -16,27 +16,19 @@ namespace backend.Services
         IRepositoryProject _repositoryProject;
         IRepositoryProjectTest _repositoryProjectTest;
         ILogger<ServiceCustomer> _logger;
-        IValidator<AddProjectTestDTO> _validator;
 
-        public ServiceProjectTest(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectTest repositoryProjectTest, ILogger<ServiceCustomer> logger, IValidator<AddProjectTestDTO> validator )
+        public ServiceProjectTest(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectTest repositoryProjectTest, ILogger<ServiceCustomer> logger)
         {
             _repositoryParticipant = repositoryParticipant;
             _repositorySystemUser = repositorySystemUser;
             _repositoryProject = repositoryProject;
             _repositoryProjectTest = repositoryProjectTest;
             _logger = logger;
-            _validator = validator;
         }
         public async Task<GetProjectTestDTO> CreateAsync(int userId, AddProjectTestDTO projectTest)
         {
             Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-            //validation
-            var validateResult = await _validator.ValidateAsync(projectTest);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
 
             Project? project = null;
 
@@ -268,12 +260,7 @@ namespace backend.Services
 
         public async Task<GetProjectTestDTO> UpdateAsync(int userId, int id, AddProjectTestDTO projectTest)
         {
-            //validation
-            var validateResult = await _validator.ValidateAsync(projectTest);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+
 
             ProjectTest projectTestToUpdate = new ProjectTest
             {

@@ -12,25 +12,18 @@ namespace backend.Services {
 		IRepositoryVendor _repositoryVendor;
 		IRepositoryVendorItem _repositoryVendorItem;
 		ILogger<ServiceCustomer> _logger;
-        IValidator<AddVendorItemDTO> _validator;
-
-        public ServiceVendorItem( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryVendor repositoryVendor, IRepositoryVendorItem repositoryVendorItem, ILogger<ServiceCustomer> logger, IValidator<AddVendorItemDTO> validator ) {
+        
+        public ServiceVendorItem( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryVendor repositoryVendor, IRepositoryVendorItem repositoryVendorItem, ILogger<ServiceCustomer> logger) {
 			_repositoryParticipant = repositoryParticipant;
 			_repositorySystemUser = repositorySystemUser;
 			_repositoryVendor = repositoryVendor;
 			_repositoryVendorItem = repositoryVendorItem;
 			_logger = logger;
-            _validator = validator;
         }
 		public async Task<GetVendorItemDTO> CreateAsync( int userId, AddVendorItemDTO vendorItem ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			//Validation
-			var validateResult = await _validator.ValidateAsync(vendorItem);
-			if ( !validateResult.IsValid )
-			{
-				throw new FluentValidation.ValidationException(validateResult.Errors);
-			}
+
 
 			Vendor? vendor = null;
 
@@ -214,13 +207,7 @@ namespace backend.Services {
 
 		public async Task<GetVendorItemDTO> UpdateAsync( int userId, int id, AddVendorItemDTO vendorItem ) {
 
-            //Validation
-            var validateResult = await _validator.ValidateAsync(vendorItem);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
-
+   
             VendorItem vendorItemToUpdate = new VendorItem {
 				Id = id,
 				Brand = vendorItem.Brand,

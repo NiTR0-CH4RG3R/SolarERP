@@ -13,24 +13,17 @@ namespace backend.Services {
 		IRepositoryParticipant _repositoryParticipant;
 		IRepositorySystemUser _repositorySystemUser;
 		ILogger<ServiceCustomer> _logger;
-        IValidator<AddSystemUserDTO> _validator;
 
-        public ServiceSystemUser( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, ILogger<ServiceCustomer> logger, IValidator<AddSystemUserDTO> validator ) {
+        public ServiceSystemUser( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, ILogger<ServiceCustomer> logger ) {
 			_repositoryParticipant = repositoryParticipant;
 			_repositorySystemUser = repositorySystemUser;
 			_logger = logger;
-            _validator = validator;
         }
 
 		public async Task<GetSystemUserDTO> CreateAsync( int userId, AddSystemUserDTO systemUser ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-            //validation
-            var validateResult = await _validator.ValidateAsync(systemUser);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+
 
             Participant participantToCreate = new Participant {
 				FirstName = systemUser.FirstName,
@@ -269,12 +262,7 @@ namespace backend.Services {
 			
 			Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-            //validation
-            var validateResult = await _validator.ValidateAsync(systemUser);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+
 
             Participant participantToUpdate = new Participant {
 				Id = id,

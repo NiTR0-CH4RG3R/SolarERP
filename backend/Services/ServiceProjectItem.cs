@@ -16,27 +16,19 @@ namespace backend.Services
         IRepositoryProject _repositoryProject;
         IRepositoryProjectItem _repositoryProjectItem;
         ILogger<ServiceCustomer> _logger;
-        IValidator<AddProjectItemDTO> _validator;
 
-        public ServiceProjectItem(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectItem repositoryProjectItem, ILogger<ServiceCustomer> logger, IValidator<AddProjectItemDTO> validator )
+        public ServiceProjectItem(IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryProject repositoryProject, IRepositoryProjectItem repositoryProjectItem, ILogger<ServiceCustomer> logger )
         {
             _repositoryParticipant = repositoryParticipant;
             _repositorySystemUser = repositorySystemUser;
             _repositoryProject = repositoryProject;
             _repositoryProjectItem = repositoryProjectItem;
             _logger = logger;
-            _validator = validator;
         }
         public async Task<GetProjectItemDTO> CreateAsync(int userId, AddProjectItemDTO projectItem)
         {
             Int32 companyId = await ServiceUtilities.GetCompanyId(_logger, _repositoryParticipant, _repositorySystemUser, userId);
 
-            //validation
-            var validateResult = await _validator.ValidateAsync(projectItem);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
 
             Project? project = null;
 
@@ -272,12 +264,7 @@ namespace backend.Services
         public async Task<GetProjectItemDTO> UpdateAsync(int userId, int id, AddProjectItemDTO projectItem)
         {
 
-            //validation
-            var validateResult = await _validator.ValidateAsync(projectItem);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+
 
             ProjectItem projectItemToUpdate = new ProjectItem
             {

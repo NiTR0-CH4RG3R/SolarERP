@@ -14,25 +14,18 @@ namespace backend.Services {
 		IRepositorySystemUser _repositorySystemUser;
 		IRepositoryTask _repositoryTask;
 		ILogger<ServiceCustomer> _logger;
-        IValidator<AddTaskDTO> _validator;
 
-        public ServiceTask( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryTask repositoryTask, ILogger<ServiceCustomer> logger, IValidator<AddTaskDTO> validator ) {
+        public ServiceTask( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IRepositoryTask repositoryTask, ILogger<ServiceCustomer> logger ) {
 			_repositoryParticipant = repositoryParticipant;
 			_repositorySystemUser = repositorySystemUser;
 			_repositoryTask = repositoryTask;
 			_logger = logger;
-            _validator = validator;
         }
 
 		public async Task<GetTaskDTO> CreateAsync( int userId, AddTaskDTO task ) {
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			//Validation
-			var validationResult = await _validator.ValidateAsync(task);
-            if (!validationResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validationResult.Errors);
-            }
+
 
             Models.Domains.Task taskToCreate = new Models.Domains.Task {
 				Id = null,
@@ -274,12 +267,6 @@ namespace backend.Services {
 			
 			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
 
-			//Validation
-            var validateResult = await _validator.ValidateAsync(task);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
 
             Models.Domains.Task taskToUpdate = new Models.Domains.Task {
 				Id = id,
