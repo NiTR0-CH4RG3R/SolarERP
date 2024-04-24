@@ -76,6 +76,21 @@ namespace backend.test.Repositories {
 			Assert.NotNull( result );
 		}
 
+
+		[Fact]
+		public async void LOLOL() {
+			IEnumerable<Participant>? result = null;
+
+			try {
+				result = await _repository.GetAllByCompanyAndCategoriesAsync( 1, new ParticipantCategory[] { ParticipantCategory.Employee, ParticipantCategory .Guest} );
+			}
+			catch ( Exception ex ) {
+				Assert.Fail( ex.Message );
+			}
+
+			Assert.NotNull( result );
+		}
+
 		[Fact]
 		public async void Test_GetAllNonEmlployeesByCompanyWithLimitAsync() {
 			IEnumerable<Participant>? result = null;

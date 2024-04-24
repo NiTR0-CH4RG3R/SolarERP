@@ -1,4 +1,5 @@
-﻿using backend.Models.DTO.Customer;
+﻿using backend.Models.Domains;
+using backend.Models.DTO.Customer;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace backend.Controllers {
 		[HttpGet("all")]
 		public async Task<IActionResult> Get( [FromQuery] Int32 userId ) {
 			try {
-				var customers = await _serviceCustomer.GetAllAsync( userId );
+				var customers = await _serviceCustomer.GetAllByCategory( userId, new ParticipantCategory[] { ParticipantCategory.Business, ParticipantCategory.Customer } );
 				return Ok( customers );
 			}
 			catch ( Exception ex ) {
