@@ -15,7 +15,7 @@ namespace backend.test.Repositories
         private readonly IRepositoryProjectTest _repository;
         public RepositoryProjectTestTest()
         {
-            _connection = new MySqlConnection("Server=localhost;Database=new_erp;Uid=root;Pwd=19240;Port=3307");
+            _connection = new MySqlConnection("Server=db-mysql-blr1-08473-do-user-14661818-0.c.db.ondigitalocean.com;Database=new_erp;Uid=doadmin;Pwd=AVNS_VXDCh37l8j_R6GxtxAI;Port=25060" );
             _connection.Open();
             _repository = new backend.Repositories.RepositoryProjectTest(_connection);
         }
