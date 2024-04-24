@@ -3,6 +3,7 @@
 namespace backend.Repositories.Interfaces {
 	public interface IRepositoryParticipant {
 		Task<IEnumerable<Participant>> GetAllByCompanyAsync( Int32 companyId );
+		Task<IEnumerable<Participant>> GetAllByCompanyAndCategoriesAsync( Int32 companyId, ParticipantCategory[] categories );
 		Task<IEnumerable<Participant>> GetAllNonEmlployeesByCompanyWithLimitAsync( Int32 companyId, Int32 offset, Int32 count );
 		Task<IEnumerable<Participant>> GetAllEmlployeesByCompanyWithLimitAsync( Int32 companyId, Int32 offset, Int32 count );
 		Task<Participant> GetByIdAsync( Int32 id );

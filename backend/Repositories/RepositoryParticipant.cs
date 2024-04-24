@@ -28,6 +28,18 @@ namespace backend.Repositories {
 			throw new NotImplementedException();
 		}
 
+		public async Task<IEnumerable<Participant>> GetAllByCompanyAndCategoriesAsync( int companyId, ParticipantCategory[] categories ) {
+			String sp = "spInsertParticipant";
+
+			var result = await _connection.QueryAsync<Participant>(sp, new {  CompanyId = companyId, Categories = string.Join( ",", categories ) }, commandType: CommandType.StoredProcedure);
+
+			if ( result == null ) {
+				throw new Exception( "No data found" );
+			}
+
+			return result;
+		}
+
 		public async Task<IEnumerable<Participant>> GetAllByCompanyAsync( int companyId ) {
 			String sp = "spSelectParticipantsByCompanyId";
 

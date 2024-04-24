@@ -8,13 +8,13 @@ using FluentValidation;
 
 
 namespace backend.Services {
-	public class ServiceCustomer( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IMapper mapper, ILogger<ServiceCustomer> logger, IValidator<AddCustomerDTO> validator ) : IServiceCustomer {
+	public class ServiceCustomer( IRepositoryParticipant repositoryParticipant, IRepositorySystemUser repositorySystemUser, IMapper mapper, ILogger<ServiceCustomer> logger/*, IValidator<AddCustomerDTO> validator*/ ) : IServiceCustomer {
 
 		IRepositoryParticipant _repositoryParticipant = repositoryParticipant;
 		IRepositorySystemUser _repositorySystemUser = repositorySystemUser;
 		IMapper _mapper = mapper;
 		ILogger<ServiceCustomer> _logger = logger;
-        IValidator<AddCustomerDTO> _validator = validator;
+        //IValidator<AddCustomerDTO> _validator = validator;
 
         public async Task<GetCustomerDTO> CreateAsync( int userId, AddCustomerDTO customer ) {
 			// Check if the user is an employee
@@ -37,11 +37,11 @@ namespace backend.Services {
 			//};
 
 			//validation
-			var validateResult = await _validator.ValidateAsync( customer );
-			if ( !validateResult.IsValid )
-			{
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+			//var validateResult = await _validator.ValidateAsync( customer );
+			//if ( !validateResult.IsValid )
+			//{
+   //             throw new FluentValidation.ValidationException(validateResult.Errors);
+   //         }
 
 			Participant newCustomer = _mapper.Map<Participant>( customer );
 			newCustomer.CompanyId = companyId;
@@ -77,6 +77,26 @@ namespace backend.Services {
 			}
 			catch ( Exception e ) {
 				_logger.LogError( e, "Error while trying to get customers by pages" );
+			}
+
+			if ( results == null ) {
+				throw new Exception( "No customers found" );
+			}
+
+			var customers = _mapper.Map<IEnumerable<GetCustomerDTO>>( results );
+
+			return customers;
+		}
+
+		public async Task<IEnumerable<GetCustomerDTO>> GetAllByCategory( int userId, ParticipantCategory[] categories ) {
+			Int32 companyId = await ServiceUtilities.GetCompanyId( _logger, _repositoryParticipant, _repositorySystemUser, userId );
+			IEnumerable<Participant>? results = null;
+
+			try {
+				results = await _repositoryParticipant.GetAllByCompanyAndCategoriesAsync( companyId, categories );
+			}
+			catch ( Exception e ) {
+				_logger.LogError( e, "Error while trying to get customers by category" );
 			}
 
 			if ( results == null ) {
@@ -134,11 +154,11 @@ namespace backend.Services {
 			updatedCustomer.CompanyId = companyId;
 			updatedCustomer.Id = id;
             
-            var validateResult = await _validator.ValidateAsync(customer);
-            if (!validateResult.IsValid)
-            {
-                throw new FluentValidation.ValidationException(validateResult.Errors);
-            }
+            //var validateResult = await _validator.ValidateAsync(customer);
+            //if (!validateResult.IsValid)
+            //{
+            //    throw new FluentValidation.ValidationException(validateResult.Errors);
+            //}
 
 
 			Participant? result = null;
