@@ -121,12 +121,12 @@ namespace backend {
 			builder.Services.AddScoped<IServiceProjectResource, ServiceProjectResource>();
 			builder.Services.AddScoped<IServiceProjectCommisionReport, ServiceProjectCommisionReport>();
 
-			//Add Fluent Validations
-			builder.Services.AddControllers()
-				.AddFluentValidation(v =>
-				{
-					v.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-				});
+			////Add Fluent Validations
+			//builder.Services.AddControllers()
+			//	.AddFluentValidation(v =>
+			//	{
+			//		v.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+			//	});
 
             // Register Validators from Validation Layer
             builder.Services.AddTransient<IValidator<AddTaskDTO>, TaskValidator>();
